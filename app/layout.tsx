@@ -55,7 +55,7 @@ export default function RootLayout({
                 </Link>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden items-center space-x-1 md:flex">
+                <nav className="hidden items-center space-x-2 md:flex">
                   {["Home", "Artists", "Top Songs", "About"].map((item) => (
                     <Link
                       key={item}
