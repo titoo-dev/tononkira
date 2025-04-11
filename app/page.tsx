@@ -7,11 +7,11 @@ export default function Home() {
       <section className="flex flex-col gap-16 md:flex-row md:items-center">
         <div className="flex-1 space-y-8">
           <div className="space-y-4">
-            <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl leading-tight font-bold tracking-tight text-transparent lg:text-6xl lg:leading-tight">
+            <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl leading-tight font-bold tracking-tight text-transparent lg:text-6xl lg:leading-[1.2] xl:leading-[1.3]">
               <span>Tononkira</span>{" "}
               <span className="font-medium">malagasy</span>
             </h1>
-            <p className="text-muted-foreground max-w-md text-xl">
+            <p className="text-muted-foreground max-w-md text-xl leading-relaxed">
               Discover and explore Malagasy song lyrics from your favorite
               artists in one place.
             </p>
