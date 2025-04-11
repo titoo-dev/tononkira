@@ -4,7 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-geist-sans: sans-serif;
+  --font-geist-sans: var(--font-inter);
+  --font-heading: var(--font-playfair);
   --font-geist-mono: monospace;
   --background: oklch(100% 0 0);
   --foreground: oklch(0% 0 40);
