@@ -1,87 +1,49 @@
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Search, Menu } from "lucide-react";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      {/* Navigation */}
-      <header className="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur">
-        <div className="container mx-auto py-3">
-          {/* Top section with logo and search */}
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center">
-              <Image
-                src="/brand.png"
-                alt="MARTILO AUDIO"
-                width={200}
-                height={200}
-                className="h-32 w-auto"
-                priority
-              />
-            </Link>
-
-            <div className="flex items-center gap-3">
-              <div className="relative hidden md:block">
-                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="w-[250px] pl-10"
-                />
-              </div>
-              <Button size="icon" variant="outline" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-              <Button size="icon" variant="ghost" className="md:hidden">
-                <Search className="h-5 w-5" />
-                <span className="sr-only">Search</span>
-              </Button>
-            </div>
+    <main className="container mx-auto py-12">
+      <section className="flex flex-col items-center gap-12 md:flex-row">
+        <div className="flex-1 space-y-6">
+          <div className="space-y-2">
+            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+              Welcome to Tononkira
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Discover the latest music from your favorite artists and explore
+              new sounds.
+            </p>
           </div>
 
-          {/* Navigation bar below */}
-          <nav className="mt-3 hidden items-center justify-between md:flex">
-            <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                Subscribe
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-foreground hover:bg-accent hover:text-accent-foreground"
-              >
-                Sign In
-              </Button>
-            </div>
-            <div className="flex">
-              {["Home", "Music", "Tour", "Gallery", "About"].map((item) => (
-                <Link
-                  key={item}
-                  href={`/${item.toLowerCase()}`}
-                  className="group relative px-3 py-2 transition-colors"
-                >
-                  <span className="group-hover:text-primary relative z-10 text-sm font-medium transition-colors">
-                    {item}
-                  </span>
-                  <span className="bg-muted absolute inset-0 scale-0 rounded-md transition-transform duration-150 ease-out group-hover:scale-100" />
-                </Link>
-              ))}
-            </div>
-          </nav>
+          <div className="flex flex-col gap-4 pt-4 sm:flex-row">
+            <Button
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Explore Music
+            </Button>
+            <Button variant="outline" size="lg" className="border-2">
+              Latest Releases
+            </Button>
+          </div>
         </div>
-      </header>
 
-      {/* Main content */}
-      <main className="container mx-auto py-6">
-        {/* Content would go here */}
-      </main>
-    </div>
+        <div className="relative flex-1">
+          <div className="from-accent/30 to-primary/30 dark:from-accent/20 dark:to-primary/20 aspect-square rounded-full bg-gradient-to-br p-1">
+            <div className="bg-muted flex h-full w-full items-center justify-center overflow-hidden rounded-full">
+              <svg
+                className="text-muted-foreground h-1/2 w-1/2 opacity-80"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-5.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z" />
+              </svg>
+            </div>
+          </div>
+          <div className="bg-primary/20 absolute -right-4 -bottom-4 h-24 w-24 rounded-full blur-xl"></div>
+          <div className="bg-accent/20 absolute -top-4 -left-4 h-24 w-24 rounded-full blur-xl"></div>
+        </div>
+      </section>
+    </main>
   );
 }
