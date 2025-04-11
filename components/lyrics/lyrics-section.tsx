@@ -100,10 +100,10 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
   };
 
   return (
-    <div className="bg-card/50 overflow-hidden rounded-xl border p-6 shadow-sm backdrop-blur-sm md:col-span-2">
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-foreground/90 text-2xl font-bold tracking-tight">
+    <div className="bg-card/50 overflow-hidden rounded-xl border p-4 shadow-sm backdrop-blur-sm md:col-span-2 md:p-6">
+      <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center md:mb-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="text-foreground/90 text-xl font-bold tracking-tight md:text-2xl">
             Lyrics
           </h2>
           <Button
@@ -111,12 +111,13 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
             size="sm"
             onClick={() => setIsKaraokeMode(!isKaraokeMode)}
             className={`${isKaraokeMode ? "text-primary bg-primary/10" : ""} rounded-full text-xs`}
+            aria-pressed={isKaraokeMode}
           >
             {isKaraokeMode ? "Karaoke Mode On" : "Enable Karaoke Mode"}
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {isKaraokeMode && (
             <>
               <Button
@@ -124,6 +125,7 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
                 size="icon"
                 className="h-8 w-8"
                 onClick={handleRestart}
+                aria-label="Restart"
               >
                 <SkipBack className="h-4 w-4" />
                 <span className="sr-only">Restart</span>
@@ -133,6 +135,7 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
                 size="icon"
                 className="h-8 w-8"
                 onClick={handlePlayPause}
+                aria-label={isPlaying ? "Pause" : "Play"}
               >
                 {isPlaying ? (
                   <Pause className="h-4 w-4" />
@@ -151,29 +154,32 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
       </div>
 
       {isKaraokeMode ? (
-        <div className="from-primary/5 to-secondary/5 relative flex h-[calc(70vh-300px)] flex-col rounded-lg bg-gradient-to-br p-4">
+        <div className="from-primary/5 to-secondary/5 relative flex min-h-[30vh] flex-col rounded-lg bg-gradient-to-br p-3 md:min-h-[40vh] md:p-4">
           {/* Lyrics container with overflow */}
           <div
             ref={containerRef}
             className="scrollbar-hide flex-1 overflow-x-hidden overflow-y-auto"
             style={{ scrollBehavior: "smooth" }}
           >
-            <div className="flex min-h-full flex-col items-center justify-center py-8">
+            <div className="flex min-h-full flex-col items-center justify-center py-4 md:py-8">
               {timedLyrics.map((line, index) => (
                 <div
                   id={`lyric-${index}`}
                   key={index}
-                  className={`my-5 w-full cursor-pointer px-6 text-center transition-all duration-500 ${
+                  className={`my-3 w-full cursor-pointer px-3 text-center transition-all duration-500 md:my-5 md:px-6 ${
                     index === activeLyricIndex
-                      ? "scale-110 opacity-100"
+                      ? "scale-105 opacity-100 md:scale-110"
                       : index < activeLyricIndex
                         ? "opacity-50"
                         : "opacity-70"
                   }`}
                   onClick={() => handleLyricTap(line.startTime)}
+                  tabIndex={0}
+                  role="button"
+                  aria-current={index === activeLyricIndex}
                 >
                   <p
-                    className={`text-2xl font-medium transition-all duration-500 ${
+                    className={`text-lg font-medium transition-all duration-500 md:text-xl lg:text-2xl ${
                       index === activeLyricIndex
                         ? "from-primary to-secondary animate-pulse bg-gradient-to-r bg-clip-text font-bold text-transparent"
                         : "text-foreground/80"
@@ -187,27 +193,29 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
           </div>
         </div>
       ) : (
-        <div className="from-primary/5 to-secondary/5 relative overflow-hidden rounded-lg bg-gradient-to-br p-8">
-          <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="from-primary/5 to-secondary/5 relative overflow-hidden rounded-lg bg-gradient-to-br p-4 md:p-8">
+          <div className="prose prose-base md:prose-lg dark:prose-invert max-w-none">
             {lyrics.map((line, index) => (
               <p
                 key={index}
-                className={line === "" ? "my-6" : "text-foreground/80 my-1"}
+                className={
+                  line === "" ? "my-4 md:my-6" : "text-foreground/80 my-1"
+                }
               >
                 {line}
               </p>
             ))}
           </div>
-          <div className="from-card/5 via-card/50 to-card absolute right-0 bottom-0 left-0 h-24 bg-gradient-to-t"></div>
+          <div className="from-card/5 via-card/50 to-card absolute right-0 bottom-0 left-0 h-16 bg-gradient-to-t md:h-24"></div>
         </div>
       )}
 
-      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between md:mt-6">
         <span className="text-muted-foreground flex items-center gap-1.5 text-sm">
           <Clock className="h-4 w-4" />
           Last updated: June 15, 2023
         </span>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button variant="outline" size="sm" className="rounded-full text-sm">
             <Maximize2 className="mr-2 h-3.5 w-3.5" />
             Full screen
