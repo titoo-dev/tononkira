@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/lib/generated/prisma";
 
 export async function createSong(input: CreateSongInput) {
-  await prisma.song.create({
+  return prisma.song.create({
     data: {
       title: input.title,
       artists: input.artists.every((a) => typeof a === "string")
@@ -31,9 +31,50 @@ export async function createSong(input: CreateSongInput) {
   });
 }
 
+export async function getSongs() {
+  return prisma.song.findMany({
+    include: {
+      artists: true,
+      album: true,
+      lyric: true,
+    },
+  });
+}
+
+export async function getSong(id: number) {
+  return prisma.song.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      artists: true,
+      album: true,
+      lyric: true,
+    },
+  });
+}
+
+export async function deleteSong(id: string) {
+  return prisma.song.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+}
+
 export type CreateSongInput = {
   title: string;
-  artists: string[] | Prisma.ArtistCreateInput[];
-  album: string | Prisma.AlbumCreateInput;
+  artists:
+    | string[]
+    | Omit<
+        Prisma.ArtistCreateInput,
+        "songs" | "albums" | "createdAt" | "updatedAt"
+      >[];
+  album:
+    | string
+    | Omit<
+        Prisma.AlbumCreateInput,
+        "createdAt" | "artists" | "songs" | "updatedAt"
+      >;
   lyrics: Omit<Prisma.LyricCreateInput, "song" | "createdAt">;
 };
