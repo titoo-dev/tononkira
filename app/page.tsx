@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -121,9 +122,11 @@ export default function Home() {
                       <div className="bg-foreground/10 h-2 w-4/5 rounded-full"></div>
                       <div className="bg-foreground/10 h-2 w-3/5 rounded-full"></div>
                     </div>
-                    <Button variant="ghost" size="sm" className="mt-4 self-end">
-                      View lyrics
-                    </Button>
+                    <Link href="/lyrics" className="mt-4 self-end">
+                      <Button variant="ghost" size="sm">
+                        View lyrics
+                      </Button>
+                    </Link>
                   </div>
                 );
               })}
