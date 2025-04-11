@@ -42,6 +42,7 @@ model Song {
   album       Album?   @relation(fields: [albumId], references: [id])
   albumId     Int?
   trackNumber Int?
+  views       Int?     @default(0)
   lyric       Lyric?   @relation(fields: [lyricId], references: [id])
   lyricId     Int?     @unique
   createdAt   DateTime @default(now())
