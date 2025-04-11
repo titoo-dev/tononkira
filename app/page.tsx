@@ -6,12 +6,13 @@ export default function Home() {
       <section className="flex flex-col gap-16 md:flex-row md:items-center">
         <div className="flex-1 space-y-8">
           <div className="space-y-4">
-            <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl font-bold tracking-tight text-transparent lg:text-6xl">
-              Tononkira
+            <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl leading-tight font-bold tracking-tight text-transparent lg:text-6xl lg:leading-tight">
+              <span>Tononkira</span>{" "}
+              <span className="font-medium">malagasy</span>
             </h1>
             <p className="text-muted-foreground max-w-md text-xl">
-              Your ultimate destination for musical discovery and lyrical
-              inspiration.
+              Discover and explore Malagasy song lyrics from your favorite
+              artists in one place.
             </p>
           </div>
 
@@ -20,26 +21,26 @@ export default function Home() {
               size="lg"
               className="shadow-primary/20 rounded-full font-medium shadow-lg"
             >
-              Explore Library
+              Find Lyrics
             </Button>
             <Button
               variant="outline"
               size="lg"
               className="border-primary/30 hover:bg-primary/10 rounded-full"
             >
-              Latest Additions
+              Popular Songs
             </Button>
           </div>
 
           <div className="grid grid-cols-3 gap-2 pt-8">
             <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-              <span className="text-sm font-medium">10K+ Songs</span>
+              <span className="text-sm font-medium">10K+ Lyrics</span>
             </div>
             <div className="bg-muted flex items-center justify-center rounded-lg p-3">
               <span className="text-sm font-medium">500+ Artists</span>
             </div>
             <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-              <span className="text-sm font-medium">24/7 Updates</span>
+              <span className="text-sm font-medium">Easy Search</span>
             </div>
           </div>
         </div>
