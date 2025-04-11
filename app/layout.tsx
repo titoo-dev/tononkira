@@ -103,7 +103,7 @@ export default function RootLayout({
             </div>
           </header>
 
-          <div className="bg-background text-foreground min-h-screen">
+          <div className="bg-background text-foreground">
             {children}
           </div>
         </body>
