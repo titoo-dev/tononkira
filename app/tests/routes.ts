@@ -1,3 +1,5 @@
 export function GET() {
-  return new Response("Hello, world!");
+  return new Response(
+    `This folder is for testing server actions.\nThis will be accessible in production.`,
+  );
 }
