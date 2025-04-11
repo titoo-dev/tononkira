@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Menu, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,11 +25,14 @@ export const metadata: Metadata = {
   // description: "Hirahira",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { userId } = await auth();
+  const isSignedIn = !!userId;
+
   return (
     <ClerkProvider>
       <html lang="en">
@@ -78,12 +82,14 @@ export default function RootLayout({
                     />
                   </div>
 
-                  <Button
-                    size="sm"
-                    className="hidden rounded-full font-medium shadow-sm md:flex"
-                  >
-                    Sign In
-                  </Button>
+                  {!isSignedIn && (
+                    <Button
+                      asChild
+                      className="hidden rounded-full font-medium shadow-sm md:flex"
+                    >
+                      <Link href="/sign-in">Sign In</Link>
+                    </Button>
+                  )}
 
                   {/* Mobile buttons */}
                   <Button size="icon" variant="ghost" className="md:hidden">
@@ -103,9 +109,7 @@ export default function RootLayout({
             </div>
           </header>
 
-          <div className="bg-background text-foreground">
-            {children}
-          </div>
+          <div className="bg-background text-foreground">{children}</div>
         </body>
       </html>
     </ClerkProvider>
