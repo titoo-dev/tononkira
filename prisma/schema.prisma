@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -12,4 +6,52 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Artist {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  bio       String?  @db.Text
+  imageUrl  String?
+  songs     Song[]
+  albums    Album[]  @relation("ArtistToAlbum")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album {
+  id          Int       @id @default(autoincrement())
+  title       String
+  releaseDate DateTime?
+  coverUrl    String?
+  artists     Artist[]  @relation("ArtistToAlbum")
+  songs       Song[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([title, releaseDate])
+}
+
+model Song {
+  id          Int      @id @default(autoincrement())
+  title       String
+  duration    Int?
+  artists     Artist[]
+  album       Album?   @relation(fields: [albumId], references: [id])
+  albumId     Int?
+  trackNumber Int?
+  lyric       Lyric?   @relation(fields: [lyricId], references: [id])
+  lyricId     Int?     @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Lyric {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  language  String   @default("mg")
+  song      Song?
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
+  - '@clerk/shared'
   - '@prisma/engines'
   - esbuild
   - prisma
