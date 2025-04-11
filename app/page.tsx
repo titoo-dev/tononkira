@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       {/* Navigation */}
-      <header className="border-border border-b">
-        <div className="container mx-auto py-4">
+      <header className="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur">
+        <div className="container mx-auto py-3">
           {/* Top section with logo and search */}
-          <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center">
               <Image
                 src="/brand.png"
@@ -22,44 +22,65 @@ export default function Home() {
               />
             </Link>
 
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <Search className="text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2" />
+            <div className="flex items-center gap-3">
+              <div className="relative hidden md:block">
+                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                 <input
                   type="search"
                   placeholder="Search..."
-                  className="border-input bg-background ring-offset-background focus-visible:ring-ring w-full rounded-md border py-2 pr-4 pl-10 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-[200px]"
+                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-[250px] rounded-md border px-3 py-1 pl-10 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                 />
               </div>
-              <Button size="sm" variant="outline" className="md:hidden">
+              <Button size="icon" variant="outline" className="md:hidden">
                 <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+              <Button size="icon" variant="ghost" className="md:hidden">
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
               </Button>
             </div>
           </div>
 
           {/* Navigation bar below */}
-          <nav className="hidden w-full items-center justify-between md:flex">
-            <div className="flex items-center space-x-4">
-              <Button size="sm" className="text-sm font-medium">
+          <nav className="mt-3 hidden items-center justify-between md:flex">
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
                 Subscribe
               </Button>
-              <Button variant="ghost" size="sm" className="text-sm font-medium">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-foreground hover:bg-accent hover:text-accent-foreground"
+              >
                 Sign In
               </Button>
             </div>
-            <div className="flex space-x-1">
+            <div className="flex">
               {["Home", "Music", "Tour", "Gallery", "About"].map((item) => (
-                <Link key={item} href="#" className="group relative px-4 py-2">
+                <Link
+                  key={item}
+                  href={`/${item.toLowerCase()}`}
+                  className="group relative px-3 py-2 transition-colors"
+                >
                   <span className="group-hover:text-primary relative z-10 text-sm font-medium transition-colors">
                     {item}
                   </span>
-                  <span className="bg-muted absolute inset-0 scale-0 rounded-md transition-transform duration-200 ease-out group-hover:scale-100" />
+                  <span className="bg-muted absolute inset-0 scale-0 rounded-md transition-transform duration-150 ease-out group-hover:scale-100" />
                 </Link>
               ))}
             </div>
           </nav>
         </div>
       </header>
+
+      {/* Main content */}
+      <main className="container mx-auto py-6">
+        {/* Content would go here */}
+      </main>
     </div>
   );
 }
