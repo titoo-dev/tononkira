@@ -6,6 +6,7 @@ import {
   Clock,
   FileEdit,
   Maximize2,
+  MicVocal,
   Pause,
   Play,
   Printer,
@@ -35,15 +36,19 @@ const LyricsHeader = ({
           Lyrics
         </h2>
         <Button
-          variant="ghost"
-          size="sm"
+          variant={isKaraokeMode ? "secondary" : "ghost"}
+          size="icon"
           onClick={() => setIsKaraokeMode(!isKaraokeMode)}
-          className={`${
-            isKaraokeMode ? "text-primary bg-primary/10" : ""
-          } rounded-full text-xs`}
+          className="h-8 w-8 rounded-full"
           aria-pressed={isKaraokeMode}
+          aria-label={
+            isKaraokeMode ? "Disable Karaoke Mode" : "Enable Karaoke Mode"
+          }
         >
-          {isKaraokeMode ? "Karaoke Mode On" : "Enable Karaoke Mode"}
+          <MicVocal className="h-4 w-4" />
+          <span className="sr-only">
+            {isKaraokeMode ? "Disable Karaoke Mode" : "Enable Karaoke Mode"}
+          </span>
         </Button>
       </div>
 
