@@ -58,19 +58,6 @@ export default async function RootLayout({
                   />
                 </Link>
 
-                {/* Desktop Navigation */}
-                <nav className="hidden items-center space-x-2 md:flex">
-                  {["Home", "Artists", "Top Songs", "About"].map((item) => (
-                    <Link
-                      key={item}
-                      href={`/${item.toLowerCase().replace(/\s+/g, "-")}`}
-                      className="hover:bg-primary/10 rounded-md px-3 py-2 text-sm font-medium transition-colors"
-                    >
-                      {item}
-                    </Link>
-                  ))}
-                </nav>
-
                 {/* Search and Actions */}
                 <div className="flex items-center gap-3">
                   <div className="relative hidden md:block">
