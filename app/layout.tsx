@@ -36,75 +36,70 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {/* Navigation */}
-          <header className="border-border bg-background/95 sticky top-0 z-40 border-b backdrop-blur">
-            <div className="container mx-auto py-3">
-              {/* Top section with logo and search */}
+          <header className="border-border/40 bg-background/80 sticky top-0 z-40 border-b backdrop-blur-md">
+            <div className="container mx-auto py-4">
               <div className="flex items-center justify-between">
-                <Link href="/" className="flex items-center">
+                {/* Logo */}
+                <Link
+                  href="/"
+                  className="flex items-center"
+                  aria-label="Tononkira Home"
+                >
                   <Image
                     src="/brand.png"
-                    alt="MARTILO AUDIO"
-                    width={200}
-                    height={200}
-                    className="h-32 w-auto"
-                    priority
+                    alt="Tononkira Logo"
+                    width={120}
+                    height={120}
+                    className="h-26 object-cover"
                   />
                 </Link>
 
+                {/* Desktop Navigation */}
+                <nav className="hidden items-center space-x-1 md:flex">
+                  {["Home", "Artists", "Top Songs", "About"].map((item) => (
+                    <Link
+                      key={item}
+                      href={`/${item.toLowerCase().replace(/\s+/g, "-")}`}
+                      className="hover:bg-primary/10 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  ))}
+                </nav>
+
+                {/* Search and Actions */}
                 <div className="flex items-center gap-3">
                   <div className="relative hidden md:block">
                     <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                     <Input
                       type="search"
-                      placeholder="Search..."
-                      className="w-[250px] pl-10"
+                      placeholder="Search lyrics..."
+                      className="bg-muted/50 w-[220px] rounded-full pl-10"
                     />
                   </div>
-                  <Button size="icon" variant="outline" className="md:hidden">
-                    <Menu className="h-5 w-5" />
-                    <span className="sr-only">Toggle menu</span>
+
+                  <Button
+                    size="sm"
+                    className="hidden rounded-full font-medium shadow-sm md:flex"
+                  >
+                    Sign In
                   </Button>
+
+                  {/* Mobile buttons */}
                   <Button size="icon" variant="ghost" className="md:hidden">
                     <Search className="h-5 w-5" />
                     <span className="sr-only">Search</span>
                   </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="border-primary/30 hover:bg-primary/10 rounded-full md:hidden"
+                  >
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">Menu</span>
+                  </Button>
                 </div>
               </div>
-
-              {/* Navigation bar below */}
-              <nav className="mt-3 hidden items-center justify-between md:flex">
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    asChild
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    <Link href="/sign-up">Subscribe</Link>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="text-foreground hover:bg-accent hover:text-accent-foreground"
-                  >
-                    <Link href="/sign-in">Sign In</Link>
-                  </Button>
-                </div>
-                <div className="flex">
-                  {["Home", "Music", "Tour", "Gallery", "About"].map((item) => (
-                    <Link
-                      key={item}
-                      href={`/${item.toLowerCase()}`}
-                      className="group relative px-3 py-2 transition-colors"
-                    >
-                      <span className="group-hover:text-primary relative z-10 text-sm font-medium transition-colors">
-                        {item}
-                      </span>
-                      <span className="bg-muted absolute inset-0 scale-0 rounded-md transition-transform duration-150 ease-out group-hover:scale-100" />
-                    </Link>
-                  ))}
-                </div>
-              </nav>
             </div>
           </header>
 

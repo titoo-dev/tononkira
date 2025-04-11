@@ -42,3 +42,6 @@ next-env.d.ts
 
 # ide
 .idea
+
+# clerk configuration (can include secrets)
+/.clerk/
