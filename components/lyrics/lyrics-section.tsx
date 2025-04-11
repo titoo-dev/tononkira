@@ -2,7 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { Clock, FileEdit, Maximize2, Printer } from "lucide-react";
+import {
+  Clock,
+  FileEdit,
+  Maximize2,
+  Pause,
+  Play,
+  Printer,
+  SkipBack,
+} from "lucide-react";
 
 export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
   const [isKaraokeMode, setIsKaraokeMode] = useState(false);
@@ -112,71 +120,30 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
           {isKaraokeMode && (
             <>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="h-8 w-8 rounded-full"
+                className="h-8 w-8"
                 onClick={handleRestart}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-skip-back"
-                >
-                  <polygon points="19 20 9 12 19 4 19 20"></polygon>
-                  <line x1="5" x2="5" y1="19" y2="5"></line>
-                </svg>
+                <SkipBack className="h-4 w-4" />
                 <span className="sr-only">Restart</span>
               </Button>
               <Button
-                variant="default"
+                variant="secondary"
                 size="icon"
-                className="from-primary to-secondary h-8 w-8 rounded-full bg-gradient-to-r"
+                className="h-8 w-8"
                 onClick={handlePlayPause}
               >
                 {isPlaying ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-pause"
-                  >
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                  </svg>
+                  <Pause className="h-4 w-4" />
                 ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-play"
-                  >
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                  </svg>
+                  <Play className="h-4 w-4" />
                 )}
                 <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
               </Button>
             </>
           )}
-          <Button variant="ghost" size="sm" className="text-primary">
+          <Button variant="ghost" size="sm">
             <FileEdit className="mr-2 h-4 w-4" />
             Suggest correction
           </Button>
@@ -184,7 +151,7 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
       </div>
 
       {isKaraokeMode ? (
-        <div className="from-primary/5 to-secondary/5 relative flex h-[calc(100vh-260px)] flex-col rounded-lg bg-gradient-to-br p-4">
+        <div className="from-primary/5 to-secondary/5 relative flex h-[calc(70vh-300px)] flex-col rounded-lg bg-gradient-to-br p-4">
           {/* Lyrics container with overflow */}
           <div
             ref={containerRef}
@@ -196,7 +163,7 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
                 <div
                   id={`lyric-${index}`}
                   key={index}
-                  className={`my-10 w-full cursor-pointer px-6 text-center transition-all duration-500 ${
+                  className={`my-5 w-full cursor-pointer px-6 text-center transition-all duration-500 ${
                     index === activeLyricIndex
                       ? "scale-110 opacity-100"
                       : index < activeLyricIndex
