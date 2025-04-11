@@ -64,7 +64,7 @@ model Lyric {
   content   String   @db.Text
   language  String   @default("mg")
   song      Song?
-  createdBy String?
+  createdBy String
   isSynced  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
