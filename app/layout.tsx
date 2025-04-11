@@ -76,16 +76,18 @@ export default function RootLayout({
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
+                    asChild
                     className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
-                    Subscribe
+                    <Link href="/sign-up">Subscribe</Link>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
+                    asChild
                     className="text-foreground hover:bg-accent hover:text-accent-foreground"
                   >
-                    Sign In
+                    <Link href="/sign-in">Sign In</Link>
                   </Button>
                 </div>
                 <div className="flex">
