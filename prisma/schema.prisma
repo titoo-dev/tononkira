@@ -52,6 +52,7 @@ model Lyric {
   language  String   @default("mg")
   song      Song?
   createdBy String?
+  isSync    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
