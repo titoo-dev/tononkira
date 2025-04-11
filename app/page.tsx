@@ -1,65 +1,79 @@
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Search, Menu } from "lucide-react";
-import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      {/* Navigation */}
-      <header className="border-border border-b">
-        <div className="container mx-auto py-4">
-          {/* Top section with logo and search */}
-          <div className="mb-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center">
-              <Image
-                src="/brand.png"
-                alt="MARTILO AUDIO"
-                width={200}
-                height={200}
-                className="h-32 w-auto"
-                priority
-              />
-            </Link>
-
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <Search className="text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2" />
-                <input
-                  type="search"
-                  placeholder="Search..."
-                  className="border-input bg-background ring-offset-background focus-visible:ring-ring w-full rounded-md border py-2 pr-4 pl-10 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-[200px]"
-                />
-              </div>
-              <Button size="sm" variant="outline" className="md:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </div>
+    <main className="container mx-auto px-4 py-16">
+      <section className="flex flex-col gap-16 md:flex-row md:items-center">
+        <div className="flex-1 space-y-8">
+          <div className="space-y-4">
+            <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl font-bold tracking-tight text-transparent lg:text-6xl">
+              Tononkira
+            </h1>
+            <p className="text-muted-foreground max-w-md text-xl">
+              Your ultimate destination for musical discovery and lyrical
+              inspiration.
+            </p>
           </div>
 
-          {/* Navigation bar below */}
-          <nav className="hidden w-full items-center justify-between md:flex">
-            <div className="flex items-center space-x-4">
-              <Button size="sm" className="text-sm font-medium">
-                Subscribe
-              </Button>
-              <Button variant="ghost" size="sm" className="text-sm font-medium">
-                Sign In
-              </Button>
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Button
+              size="lg"
+              className="shadow-primary/20 rounded-full font-medium shadow-lg"
+            >
+              Explore Library
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-primary/30 hover:bg-primary/10 rounded-full"
+            >
+              Latest Additions
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 pt-8">
+            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
+              <span className="text-sm font-medium">10K+ Songs</span>
             </div>
-            <div className="flex space-x-1">
-              {["Home", "Music", "Tour", "Gallery", "About"].map((item) => (
-                <Link key={item} href="#" className="group relative px-4 py-2">
-                  <span className="group-hover:text-primary relative z-10 text-sm font-medium transition-colors">
-                    {item}
-                  </span>
-                  <span className="bg-muted absolute inset-0 scale-0 rounded-md transition-transform duration-200 ease-out group-hover:scale-100" />
-                </Link>
-              ))}
+            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
+              <span className="text-sm font-medium">500+ Artists</span>
             </div>
-          </nav>
+            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
+              <span className="text-sm font-medium">24/7 Updates</span>
+            </div>
+          </div>
         </div>
-      </header>
-    </div>
+
+        <div className="relative flex-1">
+          <div className="relative mx-auto aspect-square max-w-md">
+            <div className="from-primary/20 via-accent/20 to-secondary/20 absolute inset-0 animate-pulse rounded-3xl bg-gradient-to-br blur-xl"></div>
+            <div className="bg-card absolute inset-4 flex items-center justify-center rounded-2xl border p-6 shadow-xl backdrop-blur-md">
+              <div className="relative h-full w-full">
+                <div className="absolute inset-x-0 top-0 flex h-2/5 flex-col items-center justify-center space-y-2">
+                  <div className="bg-accent/30 h-2 w-3/4 rounded-full"></div>
+                  <div className="bg-primary/40 h-2 w-2/3 rounded-full"></div>
+                  <div className="bg-secondary/40 h-2 w-1/2 rounded-full"></div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-muted relative flex h-20 w-20 items-center justify-center rounded-full">
+                    <div className="border-t-primary absolute inset-0 animate-spin rounded-full border-4 border-r-transparent border-b-transparent border-l-transparent"></div>
+                    <div className="bg-background flex h-14 w-14 items-center justify-center rounded-full">
+                      <span className="text-2xl">♪</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-x-0 bottom-0 flex h-2/5 flex-col items-center justify-center space-y-2">
+                  <div className="bg-secondary/40 h-2 w-1/2 rounded-full"></div>
+                  <div className="bg-primary/40 h-2 w-2/3 rounded-full"></div>
+                  <div className="bg-accent/30 h-2 w-3/4 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-primary/30 absolute -right-4 bottom-8 h-24 w-24 rounded-full blur-xl"></div>
+          <div className="bg-accent/30 absolute top-8 -left-4 h-24 w-24 rounded-full blur-xl"></div>
+        </div>
+      </section>
+    </main>
   );
 }
