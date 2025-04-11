@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Search, Menu } from "lucide-react";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   return (
@@ -25,10 +26,10 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <div className="relative hidden md:block">
                 <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                <input
+                <Input
                   type="search"
                   placeholder="Search..."
-                  className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-[250px] rounded-md border px-3 py-1 pl-10 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  className="w-[250px] pl-10"
                 />
               </div>
               <Button size="icon" variant="outline" className="md:hidden">
