@@ -75,6 +75,63 @@ export default function Home() {
           <div className="bg-accent/30 absolute top-8 -left-4 h-24 w-24 rounded-full blur-xl"></div>
         </div>
       </section>
+
+      {/* featured lyrics */}
+      <section className="py-16">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-3xl font-bold tracking-tight">Featured Lyrics</h2>
+          <Button variant="ghost" className="text-sm">
+            View all
+          </Button>
+        </div>
+
+        <div className="relative -mx-4 px-4">
+          <div className="overflow-hidden pb-6">
+            <div className="animate-marquee hover:pause flex space-x-6">
+              {Array.from({ length: 10 }).map((_, i) => {
+                const colors = [
+                  "bg-primary/10",
+                  "bg-secondary/10",
+                  "bg-accent/10",
+                  "bg-muted",
+                ];
+                const randomColor =
+                  colors[Math.floor(Math.random() * colors.length)];
+
+                return (
+                  <div
+                    key={i}
+                    className={`${randomColor} flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md`}
+                  >
+                    <div className="mb-3 flex items-center space-x-3">
+                      <div className="bg-foreground/10 flex h-10 w-10 items-center justify-center rounded-md">
+                        <span className="text-lg">♪</span>
+                      </div>
+                      <div>
+                        <h3 className="leading-none font-medium">
+                          Song Title {i + 1}
+                        </h3>
+                        <p className="text-muted-foreground text-xs">
+                          Artist Name
+                        </p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="bg-foreground/10 h-2 w-full rounded-full"></div>
+                      <div className="bg-foreground/10 h-2 w-4/5 rounded-full"></div>
+                      <div className="bg-foreground/10 h-2 w-3/5 rounded-full"></div>
+                    </div>
+                    <Button variant="ghost" size="sm" className="mt-4 self-end">
+                      View lyrics
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l to-transparent"></div>
+        </div>
+      </section>
     </main>
   );
 }
