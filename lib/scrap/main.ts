@@ -1,25 +1,32 @@
 import { getAllLyricsLinks } from "@/lib/scrap/songs";
 import { createSong, CreateSongInput } from "@/lib/actions/songs";
+import { slugify } from "../utils";
 
 async function main() {
   const songs = await getAllLyricsLinks(1, 5);
   console.log(songs);
 
-  // Import necessary functions
-
   // Process each link and create songs
   for (const song of songs) {
     try {
       // Extract data from the link
-      // Assuming link structure contains title, artist info, etc.
-      // You might need to adjust this based on your actual link structure
       const songData: CreateSongInput = {
         title: song.song.title || "Unknown Title",
-        artists: song.artist ? [song.artist] : [{ name: "Unknown Artist" }],
+        slug: slugify(song.song.title || "unknown-title"),
+        artists: song.artist
+          ? [
+              {
+                name: song.artist.name,
+                url: song.artist.url,
+                slug: slugify(song.artist.name),
+              },
+            ]
+          : [{ name: "Unknown Artist", slug: "unknown-artist" }],
         album: { title: "Unknown Album" },
         lyrics: {
           content: "",
           createdBy: "Unknown User",
+          url: song.song.url,
         },
       };
 

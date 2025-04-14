@@ -27,6 +27,7 @@ export async function createSong(input: CreateSongInput) {
       lyric: {
         create: input.lyrics,
       },
+      slug: input.slug,
     },
   });
 }
@@ -77,4 +78,5 @@ export type CreateSongInput = {
         "createdAt" | "artists" | "songs" | "updatedAt"
       >;
   lyrics: Omit<Prisma.LyricCreateInput, "song" | "createdAt">;
+  slug: string;
 };
