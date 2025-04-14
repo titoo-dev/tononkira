@@ -3,7 +3,7 @@ import { createSong, CreateSongInput } from "@/lib/actions/songs";
 import { slugify } from "../utils";
 
 async function main() {
-  const songs = await getAllLyricsLinks(1, 5);
+  const songs = await getAllLyricsLinks(6, 11);
   console.log(songs);
 
   // Process each link and create songs
