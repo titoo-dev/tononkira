@@ -106,44 +106,73 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
   contentClone.find(".mw-100").remove();
   contentClone.find(".no-print").remove();
 
-  // Get the content HTML and clean it up
-  let lyricsContent = contentClone.html() || "";
+  // Get the raw HTML content
+  const rawHtml = contentClone.html() || "";
 
-  // Convert to plain text with proper line breaks
-  lyricsContent = lyricsContent
-    .replace(/<br\s*\/?>/g, "\n") // Convert <br> to newlines
-    .replace(/&nbsp;/g, " ") // Replace &nbsp; with spaces
-    .replace(/<\/?[^>]+(>|$)/g, "") // Remove any remaining HTML tags
-    .replace(/[-]{3,}/g, "") // Remove dash lines (like '--------')
-    .replace(/\s+\n/g, "\n") // Remove trailing spaces before line breaks
-    .replace(/\n\s+/g, "\n") // Remove leading spaces after line breaks
-    .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
-    .trim();
+  // Process the HTML to identify verse blocks
+  // Handle various combinations of BR tags and newlines that separate verses
+  const processedHtml = rawHtml
+    // First normalize all line breaks and make them consistent
+    .replace(/\r\n|\r|\n/g, "\n")
+    // Replace patterns like <br>\n<br>, <br><br>, or \n<br>\n with verse breaks
+    .replace(
+      /(<br\s*\/?>)\s*\n?\s*(<br\s*\/?>)/g,
+      '<div class="verse-break"></div>',
+    )
+    // Handle cases where there are multiple BR tags separated by newlines
+    .replace(
+      /(<br\s*\/?>)\s*\n\s*(<br\s*\/?>)/g,
+      '<div class="verse-break"></div>',
+    )
+    // Replace remaining <br> tags with newlines
+    .replace(/<br\s*\/?>/g, "\n");
 
-  // Add an extra newline before verse numbers and chorus markers to ensure they're properly separated
-  lyricsContent = lyricsContent.replace(/\n(\d+[-\)])/g, "\n\n$1");
-  lyricsContent = lyricsContent.replace(
-    /\n(Ref|Refrain|Fiverenana|Chorus)(?:\s|\.|\:)?/gi,
-    "\n\n$1",
+  // Load the processed HTML back into cheerio
+  const processedContent = cheerio.load(
+    `<div id="processed-content">${processedHtml}</div>`,
   );
 
-  // Split the content into blocks based on double newlines
-  const blocks = lyricsContent.split(/\n{2,}/);
+  // Split content by the verse-break markers
+  const blocks: string[] = [];
+  let currentBlock = "";
 
-  // Process each block to identify its type and content
+  processedContent("#processed-content")
+    .contents()
+    .each((_, element) => {
+      if (processedContent(element).is(".verse-break")) {
+        if (currentBlock.trim()) {
+          blocks.push(currentBlock.trim());
+          currentBlock = "";
+        }
+      } else if (element.type === "text") {
+        currentBlock += processedContent(element).text();
+      } else if (!processedContent(element).is("script, style")) {
+        // For other elements, get their text content
+        currentBlock += processedContent(element).text();
+      }
+    });
+
+  // Add the last block if it's not empty
+  if (currentBlock.trim()) {
+    blocks.push(currentBlock.trim());
+  }
+
+  // Clean up each block and convert to ContentBlock format
   const contentBlocks: ContentBlock[] = blocks
     .map((block) => {
-      const trimmedBlock = block.trim();
+      const trimmedBlock = block
+        .replace(/&nbsp;/g, " ") // Replace &nbsp; with spaces
+        .replace(/[-]{3,}/g, "") // Remove dash lines (like '--------')
+        .replace(/\s+\n/g, "\n") // Remove trailing spaces before line breaks
+        .replace(/\n\s+/g, "\n") // Remove leading spaces after line breaks
+        .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
+        .trim();
 
       if (!trimmedBlock) {
         return null; // Skip empty blocks
       }
 
       const lines = trimmedBlock.split("\n");
-
-      // Detect verse numbers (like "1-", "2-", "1)", "2)")
-      const verseNumberPattern = /^\d+[-\)][\s]*/;
-      const startsWithVerseNumber = verseNumberPattern.test(lines[0]);
 
       // Default type is verse
       let type = "verse";
@@ -163,7 +192,7 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
         /^[oO]{2,}$/,
       ];
 
-      // Check first line for chorus markers
+      // Check if this is a chorus
       const firstLine = lines[0].trim();
       const isChorusMarker = chorusPatterns.some((pattern) =>
         pattern.test(firstLine),
@@ -179,7 +208,6 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
       );
 
       if (isChorusMarker) {
-        // If the first line is just a marker, remove it from content
         type = "chorus";
         // Remove the chorus marker from content
         lines.shift();
@@ -196,8 +224,11 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
         type = "chorus";
       }
 
-      // If it's a verse with a number, extract the verse number
+      // Check if verse has a verse number
+      const verseNumberPattern = /^\d+[-\)][\s]*/;
+      const startsWithVerseNumber = verseNumberPattern.test(lines[0]);
       let verseNumber: number | undefined;
+
       if (type === "verse" && startsWithVerseNumber) {
         const match = lines[0].match(/^(\d+)[-\)]/);
         if (match && match[1]) {
