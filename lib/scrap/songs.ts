@@ -7,6 +7,10 @@ export interface LinkData {
   artist: { name: string; url: string };
   song: { title: string; url: string };
 }
+
+export interface LyricsData {
+  content: string;
+}
 /**
  * Fetches the HTML content of a lyrics page
  * @param page Page number to fetch
@@ -15,6 +19,15 @@ export interface LinkData {
 const fetchLyricsPage = async (page: number): Promise<cheerio.CheerioAPI> => {
   const url = new URL(LYRICS_LIST_URL);
   url.searchParams.set("page", page.toString());
+  const pageText = await fetch(url, { headers: { accept: "text/html" } }).then(
+    (res) => res.text(),
+  );
+  return cheerio.load(pageText);
+};
+
+export const fetchLyricsContentPage = async (
+  url: string,
+): Promise<cheerio.CheerioAPI> => {
   const pageText = await fetch(url, { headers: { accept: "text/html" } }).then(
     (res) => res.text(),
   );
@@ -67,6 +80,43 @@ const parseLyricsLinks = ($: cheerio.CheerioAPI): LinkData[] => {
     });
 
   return links;
+};
+/**
+ * Extracts the lyrics content from a song page
+ * @param $ Cheerio object containing the parsed HTML of the song page
+ * @returns The lyrics content as a string
+ */
+export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
+  // Find the lyrics container which is in the first column of the main content area
+  const mainContentColumn = $("#main .col-md-8").first();
+
+  // Get all text nodes and elements between the h2 title and the "Rohy:" section
+  let lyricsContent = "";
+
+  // Clone the content to avoid modifying the original
+  const contentClone = mainContentColumn.clone();
+
+  // Remove the title, edit link, print info, and permalink sections
+  contentClone.find("h2").remove();
+  contentClone.find(".text-end").remove();
+  contentClone.find(".print").remove();
+  contentClone.find(".mw-100").remove();
+  contentClone.find(".no-print").remove();
+
+  // Get the remaining HTML content and clean it up
+  lyricsContent = contentClone.html() || "";
+
+  // Further clean up: remove any leading/trailing whitespace or divs
+  lyricsContent = lyricsContent
+    .trim()
+    .replace(/<div.*?>(.*?)<\/div>/g, "$1") // Replace div tags with their content
+    .replace(/<br\s*\/?>/g, "\n") // Convert <br> to newlines
+    .replace(/&nbsp;/g, " ") // Replace &nbsp; with spaces
+    .replace(/<\/?[^>]+(>|$)/g, "") // Remove any remaining HTML tags
+    .replace(/\n{3,}/g, "\n\n") // Replace multiple newlines with just two
+    .trim();
+
+  return { content: lyricsContent };
 };
 
 /**

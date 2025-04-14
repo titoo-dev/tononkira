@@ -1,50 +1,56 @@
-import { getAllLyricsLinks } from "@/lib/scrap/songs";
-import { createSong, CreateSongInput } from "@/lib/actions/songs";
-import { slugify } from "../utils";
+import { parseLyricsContent, fetchLyricsContentPage } from "@/lib/scrap/songs";
 
 async function main() {
-  const songs = await getAllLyricsLinks(6, 11);
-  console.log(songs);
+  const content = await fetchLyricsContentPage(
+    "https://tononkira.serasera.org/hira/aifa-imerintsiatosika-aina-sy-fanahy-ziona-vaovao-imerintsiatosika/velona-mandrakizay",
+  );
 
-  // Process each link and create songs
-  for (const song of songs) {
-    try {
-      // Extract data from the link
-      const songData: CreateSongInput = {
-        title: song.song.title || "Unknown Title",
-        slug: slugify(song.song.title || "unknown-title"),
-        artists: song.artist
-          ? [
-              {
-                name: song.artist.name,
-                url: song.artist.url,
-                slug: slugify(song.artist.name),
-              },
-            ]
-          : [{ name: "Unknown Artist", slug: "unknown-artist" }],
-        album: { title: "Unknown Album" },
-        lyrics: {
-          content: "",
-          createdBy: "Unknown User",
-          url: song.song.url,
-        },
-      };
+  const parsedContent = parseLyricsContent(content);
 
-      console.log(`Creating song: ${songData.title}`);
+  console.dir(parsedContent, { depth: null });
 
-      // Create the song in the database
-      const createdSong = await createSong(songData);
-      console.log(`Created song with ID: ${createdSong.id}`);
-    } catch (error) {
-      console.error(
-        `Failed to create song for link: ${JSON.stringify(song)}`,
-        error,
-      );
-      // Continue with the next link even if one fails
-    }
-  }
+  // const songs = await getAllLyricsLinks(6, 11);
+  // console.log(songs);
 
-  console.log("Finished creating songs from links");
+  // // Process each link and create songs
+  // for (const song of songs) {
+  //   try {
+  //     // Extract data from the link
+  //     const songData: CreateSongInput = {
+  //       title: song.song.title || "Unknown Title",
+  //       slug: slugify(song.song.title || "unknown-title"),
+  //       artists: song.artist
+  //         ? [
+  //             {
+  //               name: song.artist.name,
+  //               url: song.artist.url,
+  //               slug: slugify(song.artist.name),
+  //             },
+  //           ]
+  //         : [{ name: "Unknown Artist", slug: "unknown-artist" }],
+  //       album: { title: "Unknown Album" },
+  //       lyrics: {
+  //         content: "",
+  //         createdBy: "Unknown User",
+  //         url: song.song.url,
+  //       },
+  //     };
+
+  //     console.log(`Creating song: ${songData.title}`);
+
+  //     // Create the song in the database
+  //     const createdSong = await createSong(songData);
+  //     console.log(`Created song with ID: ${createdSong.id}`);
+  //   } catch (error) {
+  //     console.error(
+  //       `Failed to create song for link: ${JSON.stringify(song)}`,
+  //       error,
+  //     );
+  //     // Continue with the next link even if one fails
+  //   }
+  // }
+
+  // console.log("Finished creating songs from links");
 }
 
 main().catch((error) => {
