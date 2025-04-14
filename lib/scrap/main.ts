@@ -2,7 +2,7 @@ import { parseLyricsContent, fetchLyricsContentPage } from "@/lib/scrap/songs";
 
 async function main() {
   const content = await fetchLyricsContentPage(
-    "https://tononkira.serasera.org/hira/aifa-imerintsiatosika-aina-sy-fanahy-ziona-vaovao-imerintsiatosika/velona-mandrakizay",
+    "https://tononkira.serasera.org/hira/serafima-ambohibao-toby/tsaroanao-ve",
   );
 
   const parsedContent = parseLyricsContent(content);

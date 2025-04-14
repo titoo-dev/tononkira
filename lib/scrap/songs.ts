@@ -9,8 +9,14 @@ export interface LinkData {
 }
 
 export interface LyricsData {
-  content: string;
+  content: ContentBlock[];
 }
+
+export interface ContentBlock {
+  type: string;
+  content: string[];
+}
+
 /**
  * Fetches the HTML content of a lyrics page
  * @param page Page number to fetch
@@ -90,9 +96,6 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
   // Find the lyrics container which is in the first column of the main content area
   const mainContentColumn = $("#main .col-md-8").first();
 
-  // Get all text nodes and elements between the h2 title and the "Rohy:" section
-  let lyricsContent = "";
-
   // Clone the content to avoid modifying the original
   const contentClone = mainContentColumn.clone();
 
@@ -103,20 +106,116 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
   contentClone.find(".mw-100").remove();
   contentClone.find(".no-print").remove();
 
-  // Get the remaining HTML content and clean it up
-  lyricsContent = contentClone.html() || "";
+  // Get the content HTML and clean it up
+  let lyricsContent = contentClone.html() || "";
 
-  // Further clean up: remove any leading/trailing whitespace or divs
+  // Convert to plain text with proper line breaks
   lyricsContent = lyricsContent
-    .trim()
-    .replace(/<div.*?>(.*?)<\/div>/g, "$1") // Replace div tags with their content
     .replace(/<br\s*\/?>/g, "\n") // Convert <br> to newlines
     .replace(/&nbsp;/g, " ") // Replace &nbsp; with spaces
     .replace(/<\/?[^>]+(>|$)/g, "") // Remove any remaining HTML tags
-    .replace(/\n{3,}/g, "\n\n") // Replace multiple newlines with just two
+    .replace(/[-]{3,}/g, "") // Remove dash lines (like '--------')
+    .replace(/\s+\n/g, "\n") // Remove trailing spaces before line breaks
+    .replace(/\n\s+/g, "\n") // Remove leading spaces after line breaks
+    .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
     .trim();
 
-  return { content: lyricsContent };
+  // Add an extra newline before verse numbers and chorus markers to ensure they're properly separated
+  lyricsContent = lyricsContent.replace(/\n(\d+[-\)])/g, "\n\n$1");
+  lyricsContent = lyricsContent.replace(
+    /\n(Ref|Refrain|Fiverenana|Chorus)(?:\s|\.|\:)?/gi,
+    "\n\n$1",
+  );
+
+  // Split the content into blocks based on double newlines
+  const blocks = lyricsContent.split(/\n{2,}/);
+
+  // Process each block to identify its type and content
+  const contentBlocks: ContentBlock[] = blocks
+    .map((block) => {
+      const trimmedBlock = block.trim();
+
+      if (!trimmedBlock) {
+        return null; // Skip empty blocks
+      }
+
+      const lines = trimmedBlock.split("\n");
+
+      // Detect verse numbers (like "1-", "2-", "1)", "2)")
+      const verseNumberPattern = /^\d+[-\)][\s]*/;
+      const startsWithVerseNumber = verseNumberPattern.test(lines[0]);
+
+      // Default type is verse
+      let type = "verse";
+
+      // Common patterns for chorus/refrain markers in Malagasy and French songs
+      const chorusPatterns = [
+        /^chorus$/i,
+        /^refrain$/i,
+        /^ref(?:\.|\:)?$/i, // For "Ref", "Ref.", or "Ref:"
+        /^fiverenana$/i,
+        /^fiv(?:\.|\:)?$/i,
+        /^\[chorus\]$/i,
+        /^\[refrain\]$/i,
+        /^\[ref(?:\.|\:)?\]$/i, // For "[Ref]", "[Ref.]", or "[Ref:]"
+        /^\[fiverenana\]$/i,
+        /^La La La\.\.\.$/i,
+        /^[oO]{2,}$/,
+      ];
+
+      // Check first line for chorus markers
+      const firstLine = lines[0].trim();
+      const isChorusMarker = chorusPatterns.some((pattern) =>
+        pattern.test(firstLine),
+      );
+
+      // Check for repetition patterns indicating chorus
+      const repeatedBlock =
+        blocks.filter((b) => b.trim() === trimmedBlock).length > 1;
+
+      // Check for parenthesized text that might indicate backing vocals in chorus
+      const hasParenthesizedLines = lines.some((line) =>
+        /\([^)]+\)/.test(line),
+      );
+
+      if (isChorusMarker) {
+        // If the first line is just a marker, remove it from content
+        type = "chorus";
+        // Remove the chorus marker from content
+        lines.shift();
+      } else if (
+        repeatedBlock &&
+        (hasParenthesizedLines || trimmedBlock.length < 100)
+      ) {
+        // Shorter repeated blocks or blocks with backing vocals are likely chorus
+        type = "chorus";
+      } else if (
+        /^[Ll]a [Ll]a [Ll]a|^[Oo]{2,}|^[Nn]a [Nn]a [Nn]a/.test(trimmedBlock)
+      ) {
+        // Common sound patterns for chorus/bridge
+        type = "chorus";
+      }
+
+      // If it's a verse with a number, extract the verse number
+      let verseNumber: number | undefined;
+      if (type === "verse" && startsWithVerseNumber) {
+        const match = lines[0].match(/^(\d+)[-\)]/);
+        if (match && match[1]) {
+          verseNumber = parseInt(match[1], 10);
+          // Remove the verse number from the first line
+          lines[0] = lines[0].replace(verseNumberPattern, "");
+        }
+      }
+
+      return {
+        type,
+        content: lines.filter((line) => line.trim().length > 0),
+        ...(verseNumber !== undefined && { verseNumber }),
+      };
+    })
+    .filter(Boolean) as ContentBlock[];
+
+  return { content: contentBlocks };
 };
 
 /**
