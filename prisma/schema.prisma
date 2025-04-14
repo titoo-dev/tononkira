@@ -11,12 +11,12 @@ datasource db {
 model Artist {
   id        Int      @id @default(autoincrement())
   name      String
-  bio       String?  @db.Text
+  bio       String?
   imageUrl  String?
-  songs     Song[]
-  albums    Album[]  @relation("ArtistToAlbum")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  albums    Album[]  @relation("ArtistToAlbum")
+  songs     Song[]   @relation("ArtistToSong")
 
   @@index([name])
 }
@@ -26,10 +26,10 @@ model Album {
   title       String
   releaseDate DateTime?
   coverUrl    String?
-  artists     Artist[]  @relation("ArtistToAlbum")
-  songs       Song[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  songs       Song[]
+  artists     Artist[]  @relation("ArtistToAlbum")
 
   @@unique([title, releaseDate])
 }
@@ -38,15 +38,15 @@ model Song {
   id          Int      @id @default(autoincrement())
   title       String
   duration    Int?
-  artists     Artist[]
-  album       Album?   @relation(fields: [albumId], references: [id])
   albumId     Int?
   trackNumber Int?
   views       Int?     @default(0)
-  lyric       Lyric?   @relation(fields: [lyricId], references: [id])
   lyricId     Int?     @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  album       Album?   @relation(fields: [albumId], references: [id])
+  lyric       Lyric?   @relation(fields: [lyricId], references: [id])
+  artists     Artist[] @relation("ArtistToSong")
 }
 
 model LikedSong {
@@ -61,11 +61,11 @@ model LikedSong {
 
 model Lyric {
   id        Int      @id @default(autoincrement())
-  content   String   @db.Text
+  content   String
   language  String   @default("mg")
-  song      Song?
   createdBy String
   isSynced  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  song      Song?
 }
