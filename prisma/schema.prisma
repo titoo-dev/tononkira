@@ -63,13 +63,14 @@ model LikedSong {
 }
 
 model Lyric {
-  id        Int      @id @default(autoincrement())
-  content   String
-  url       String
-  language  String   @default("mg")
-  createdBy String
-  isSynced  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  song      Song?
+  id          Int      @id @default(autoincrement())
+  content     String
+  contentText String?
+  url         String
+  language    String   @default("mg")
+  createdBy   String
+  isSynced    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  song        Song?
 }

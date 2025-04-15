@@ -4,31 +4,44 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/lib/generated/prisma";
 
 export async function createSong(input: CreateSongInput) {
-  return prisma.song.create({
-    data: {
-      title: input.title,
-      artists: input.artists.every((a) => typeof a === "string")
-        ? {
-            connect: input.artists.map((id) => ({ id: Number(id) })),
-          }
-        : {
-            create: input.artists as Prisma.ArtistCreateInput[],
-          },
-
-      album:
-        typeof input.album === "string"
+  return prisma.$transaction(async (tx) => {
+    // Create the song with its relationships
+    const song = await tx.song.create({
+      data: {
+        title: input.title,
+        slug: input.slug,
+        // Handle artists based on input type
+        artists: input.artists.every((a) => typeof a === "string")
           ? {
-              connect: { id: Number(input.album) },
+              connect: input.artists.map((id) => ({ id: Number(id) })),
             }
           : {
-              create: input.album as Prisma.AlbumCreateInput,
+              create: input.artists as Prisma.ArtistCreateInput[],
             },
 
-      lyric: {
-        create: input.lyrics,
+        // Handle album based on input type
+        album:
+          typeof input.album === "string"
+            ? {
+                connect: { id: Number(input.album) },
+              }
+            : {
+                create: input.album as Prisma.AlbumCreateInput,
+              },
+
+        // Create lyrics
+        lyric: {
+          create: input.lyrics,
+        },
       },
-      slug: input.slug,
-    },
+      include: {
+        artists: true,
+        album: true,
+        lyric: true,
+      },
+    });
+
+    return song;
   });
 }
 
@@ -65,12 +78,10 @@ export async function deleteSong(id: string) {
 
 export type CreateSongInput = {
   title: string;
-  artists:
-    | string[]
-    | Omit<
-        Prisma.ArtistCreateInput,
-        "songs" | "albums" | "createdAt" | "updatedAt"
-      >[];
+  artists: Omit<
+    Prisma.ArtistCreateInput,
+    "songs" | "albums" | "createdAt" | "updatedAt"
+  >[];
   album:
     | string
     | Omit<

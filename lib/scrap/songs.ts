@@ -3,9 +3,9 @@ import * as cheerio from "cheerio";
 const BASE_URL = "https://tononkira.serasera.org";
 const LYRICS_LIST_URL = `${BASE_URL}/tononkira`;
 
-export interface LinkData {
+export interface SongData {
   artist: { name: string; url: string };
-  song: { title: string; url: string };
+  song: { title: string; url: string; lyrics?: string };
 }
 
 export interface LyricsData {
@@ -16,28 +16,61 @@ export interface ContentBlock {
   type: string;
   content: string[];
 }
-
 /**
  * Fetches the HTML content of a lyrics page
  * @param page Page number to fetch
  * @returns Cheerio object containing the parsed HTML
  */
-const fetchLyricsPage = async (page: number): Promise<cheerio.CheerioAPI> => {
-  const url = new URL(LYRICS_LIST_URL);
-  url.searchParams.set("page", page.toString());
-  const pageText = await fetch(url, { headers: { accept: "text/html" } }).then(
-    (res) => res.text(),
-  );
-  return cheerio.load(pageText);
+export const fetchLyricsPage = async (
+  page: number,
+): Promise<cheerio.CheerioAPI> => {
+  console.log(`🔍 Fetching lyrics page: ${page}`);
+
+  try {
+    const url = new URL(LYRICS_LIST_URL);
+    url.searchParams.set("page", page.toString());
+
+    const response = await fetch(url, { headers: { accept: "text/html" } });
+
+    if (!response.ok) {
+      console.error(`⚠️ Failed to fetch page ${page}: HTTP ${response.status}`);
+      throw new Error(`Failed to fetch page ${page}: HTTP ${response.status}`);
+    }
+
+    const pageText = await response.text();
+    return cheerio.load(pageText);
+  } catch (error) {
+    console.error(`❌ Error fetching page ${page}:`, error);
+    throw error;
+  }
 };
 
+/**
+ * Fetches the HTML content of a specific song lyrics page
+ * @param url URL of the lyrics page to fetch
+ * @returns Cheerio object containing the parsed HTML
+ */
 export const fetchLyricsContentPage = async (
   url: string,
 ): Promise<cheerio.CheerioAPI> => {
-  const pageText = await fetch(url, { headers: { accept: "text/html" } }).then(
-    (res) => res.text(),
-  );
-  return cheerio.load(pageText);
+  console.log(`🔍 Fetching lyrics content from: ${url}`);
+
+  try {
+    const response = await fetch(url, { headers: { accept: "text/html" } });
+
+    if (!response.ok) {
+      console.error(
+        `⚠️ Failed to fetch lyrics from ${url}: HTTP ${response.status}`,
+      );
+      throw new Error(`Failed to fetch lyrics: HTTP ${response.status}`);
+    }
+
+    const pageText = await response.text();
+    return cheerio.load(pageText);
+  } catch (error) {
+    console.error(`❌ Error fetching lyrics from ${url}:`, error);
+    throw error;
+  }
 };
 
 /**
@@ -47,13 +80,25 @@ export const fetchLyricsContentPage = async (
  */
 const getTotalLyricsPages = ($: cheerio.CheerioAPI): number => {
   const totalPageElement = $("[aria-label='Farany']");
-  if (!totalPageElement.length) return 1;
+
+  if (!totalPageElement.length) {
+    return 1;
+  }
 
   const href = totalPageElement.attr("href");
-  if (!href) return 1;
+  if (!href) {
+    return 1;
+  }
 
-  const pageParam = new URL(href).searchParams.get("page");
-  return pageParam ? parseInt(pageParam, 10) || 1 : 1;
+  try {
+    const pageParam = new URL(href).searchParams.get("page");
+    const totalPages = pageParam ? parseInt(pageParam, 10) || 1 : 1;
+    console.log(`📊 Total pages: ${totalPages}`);
+    return totalPages;
+  } catch (error) {
+    console.error("❌ Error parsing URL from href:", error);
+    return 1;
+  }
 };
 
 /**
@@ -61,32 +106,54 @@ const getTotalLyricsPages = ($: cheerio.CheerioAPI): number => {
  * @param $ Cheerio object containing the parsed HTML
  * @returns Array of link data objects
  */
-const parseLyricsLinks = ($: cheerio.CheerioAPI): LinkData[] => {
-  const links: LinkData[] = [];
+const parseSongList = async ($: cheerio.CheerioAPI): Promise<SongData[]> => {
+  const links: SongData[] = [];
 
-  $("#main div")
-    .filter((_, div) => $(div).hasClass("border p-2 mb-3"))
-    .each((_, div) => {
-      const titleElement = $(div).find(`a[href^="${BASE_URL}/hira"]`).eq(0);
-      const artistElement = $(div).find(`a[href^="${BASE_URL}/mpihira"]`).eq(0);
+  const songDivs = $("#main div").filter((_, div) =>
+    $(div).hasClass("border p-2 mb-3"),
+  );
+  console.log(`📋 Found ${songDivs.length} song entries`);
 
-      const title = titleElement.text().trim();
-      const artist = artistElement.text().trim();
+  songDivs.each((index, div) => {
+    const titleElement = $(div).find(`a[href^="${BASE_URL}/hira"]`).eq(0);
+    const artistElement = $(div).find(`a[href^="${BASE_URL}/mpihira"]`).eq(0);
 
-      links.push({
-        artist: {
-          name: artist || "",
-          url: artistElement.attr("href") || "",
-        },
-        song: {
-          title: title || "",
-          url: titleElement.attr("href") || "",
-        },
-      });
+    const title = titleElement.text().trim();
+    const artist = artistElement.text().trim();
+
+    links.push({
+      artist: {
+        name: artist || "",
+        url: artistElement.attr("href") || "",
+      },
+      song: {
+        title: title || "",
+        url: titleElement.attr("href") || "",
+      },
     });
+  });
+
+  // fetch lyrics content and parse those for each links
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    console.log(
+      `📄 [${i + 1}/${links.length}] Fetching lyrics for "${link.song.title}" by ${link.artist.name}`,
+    );
+    try {
+      const content = await fetchLyricsContentPage(link.song.url);
+      const parsedContent = parseLyricsContent(content);
+      link.song.lyrics = JSON.stringify(parsedContent);
+    } catch (error) {
+      console.error(
+        `❌ Error processing lyrics for "${link.song.title}":`,
+        error,
+      );
+    }
+  }
 
   return links;
 };
+
 /**
  * Extracts the lyrics content from a song page
  * @param $ Cheerio object containing the parsed HTML of the song page
@@ -110,7 +177,6 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
   const rawHtml = contentClone.html() || "";
 
   // Process the HTML to identify verse blocks
-  // Handle various combinations of BR tags and newlines that separate verses
   const processedHtml = rawHtml
     // First normalize all line breaks and make them consistent
     .replace(/\r\n|\r|\n/g, "\n")
@@ -258,19 +324,36 @@ export const parseLyricsContent = ($: cheerio.CheerioAPI): LyricsData => {
 const fetchLinksInRange = async (
   start: number,
   end: number,
-): Promise<LinkData[]> => {
-  const allData: LinkData[] = [];
+): Promise<SongData[]> => {
+  const allData: SongData[] = [];
+  console.log(`🔍 Fetching lyrics from pages ${start} to ${end}`);
 
   for (let i = start; i <= end; i += 5) {
     const pageNumbers = Array.from(
       { length: Math.min(5, end - i + 1) },
       (_, idx) => i + idx,
     );
+    console.log(`📑 Processing batch: pages ${pageNumbers.join(", ")}`);
 
-    const chunks = await Promise.all(pageNumbers.map(fetchLyricsPage));
-    chunks.forEach(($) => allData.push(...parseLyricsLinks($)));
+    const chunks = await Promise.all(
+      pageNumbers.map(async (pageNum) => {
+        return fetchLyricsPage(pageNum);
+      }),
+    );
+
+    // Process each chunk sequentially due to async parsing
+    for (let j = 0; j < chunks.length; j++) {
+      const pageNum = pageNumbers[j];
+      console.log(`🎵 Parsing songs from page ${pageNum}`);
+      const links = await parseSongList(chunks[j]);
+      console.log(`✅ Found ${links.length} songs on page ${pageNum}`);
+      allData.push(...links);
+    }
+
+    console.log(`📊 Progress: Collected ${allData.length} songs so far`);
   }
 
+  console.log(`🎉 Total songs collected: ${allData.length}`);
   return allData;
 };
 
@@ -283,12 +366,26 @@ const fetchLinksInRange = async (
 export const getAllLyricsLinks = async (
   start: number = 1,
   end: number = Infinity,
-): Promise<LinkData[]> => {
+): Promise<SongData[]> => {
+  console.log(
+    `🚀 Starting getAllLyricsLinks: pages ${start} to ${end === Infinity ? "max" : end}`,
+  );
+
   const $ = await fetchLyricsPage(1);
   const totalPages = getTotalLyricsPages($);
 
   const rangeStart = Math.max(1, start);
   const rangeEnd = Math.min(totalPages, end);
+  console.log(
+    `🔍 Fetching pages ${rangeStart} to ${rangeEnd} (out of ${totalPages} total)`,
+  );
 
-  return fetchLinksInRange(rangeStart, rangeEnd);
+  if (rangeStart > rangeEnd) {
+    console.warn(
+      "⚠️ Invalid range: start page exceeds end page or total pages",
+    );
+    return [];
+  }
+
+  return await fetchLinksInRange(rangeStart, rangeEnd);
 };
