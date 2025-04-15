@@ -5,14 +5,6 @@ import { slugify } from "../utils";
 async function main() {
   console.log("Starting the scraping process...");
 
-  // const content = await fetchLyricsContentPage(
-  //   "https://tononkira.serasera.org/hira/serafima-ambohibao-toby/tsaroanao-ve",
-  // );
-
-  // const parsedContent = parseLyricsContent(content);
-
-  // console.dir(parsedContent, { depth: null });
-
   const songs = await getAllLyricsLinks(601, 762);
   console.log(`Retrieved ${songs.length} song links to process`);
 
