@@ -13,7 +13,7 @@ async function main() {
 
   // console.dir(parsedContent, { depth: null });
 
-  const songs = await getAllLyricsLinks(6, 30);
+  const songs = await getAllLyricsLinks(601, 762);
   console.log(`Retrieved ${songs.length} song links to process`);
 
   let successCount = 0;
