@@ -6,9 +6,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
+import GlobalSearch from "@/components/search";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -60,14 +60,7 @@ export default async function RootLayout({
 
                 {/* Search and Actions */}
                 <div className="flex items-center gap-3">
-                  <div className="relative hidden md:block">
-                    <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                    <Input
-                      type="search"
-                      placeholder="Search lyrics..."
-                      className="bg-muted/50 w-[220px] rounded-full pl-10"
-                    />
-                  </div>
+                  <GlobalSearch />
 
                   {!isSignedIn && (
                     <Button
