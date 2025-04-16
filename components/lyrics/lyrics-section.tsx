@@ -207,7 +207,19 @@ const LyricsFooter = () => {
 };
 
 // Main LyricsSection component
-export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
+export interface Verse {
+  type: string;
+  content: string[];
+  verseNumber?: number;
+}
+
+export interface LyricsSectionProps {
+  lyrics: {
+    content: Verse[];
+  };
+}
+
+export const LyricsSection = ({ lyrics }: LyricsSectionProps) => {
   const [isKaraokeMode, setIsKaraokeMode] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -215,16 +227,30 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Create timed lyrics (in a real app, these would come from an API)
+  // Flatten lyrics content for display
+  const flatLyrics = useMemo(() => {
+    return lyrics.content.flatMap((verse) => {
+      // Add verse number if available
+      const lines = [...verse.content];
+      if (verse.verseNumber) {
+        lines[0] = `${verse.verseNumber}. ${lines[0]}`;
+      }
+
+      // Add empty line after each verse for spacing
+      return [...lines, ""];
+    });
+  }, [lyrics]);
+
+  // Create timed lyrics for karaoke mode
   const timedLyrics = useMemo(() => {
-    return lyrics
+    return flatLyrics
       .filter((line) => line.trim() !== "")
       .map((line, index) => ({
         text: line,
         startTime: index * 5, // Every 5 seconds for demo
         endTime: (index + 1) * 5,
       }));
-  }, [lyrics]);
+  }, [flatLyrics]);
 
   // Total duration of the song
   const totalDuration =
@@ -312,7 +338,7 @@ export const LyricsSection = ({ lyrics }: { lyrics: string[] }) => {
           containerRef={containerRef}
         />
       ) : (
-        <StandardLyricsView lyrics={lyrics} />
+        <StandardLyricsView lyrics={flatLyrics} />
       )}
 
       <LyricsFooter />

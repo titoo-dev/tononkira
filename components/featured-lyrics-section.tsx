@@ -75,7 +75,10 @@ export async function FeaturedLyricsSection() {
                     </p>
                     <p>{song.views ?? 0} views</p>
                   </div>
-                  <Link href={`/lyrics/${song.slug}`} className="mt-4 self-end">
+                  <Link
+                    href={`/lyrics/${song.artists.at(0)?.slug}/${song.slug}`}
+                    className="mt-4 self-end"
+                  >
                     <Button variant="ghost" size="sm">
                       View lyrics
                     </Button>
