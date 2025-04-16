@@ -1,6 +1,7 @@
 import { FeaturedLyricsSection } from "@/components/featured-lyrics-section";
 import { FeaturedLyricsSkeleton } from "@/components/featured-lyrics-skeleton";
 import { StatsDisplay } from "@/components/stat-display";
+import { StatDisplaySkeleton } from "@/components/stat-display-skeleton";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
 
@@ -36,7 +37,9 @@ export default function Home() {
             </Button>
           </div>
 
-          <StatsDisplay />
+          <Suspense fallback={<StatDisplaySkeleton />}>
+            <StatsDisplay />
+          </Suspense>
         </div>
 
         <div className="relative flex-1">
