@@ -2,7 +2,7 @@ import { FeaturedLyricsSection } from "@/components/featured-lyrics-section";
 import { FeaturedLyricsSkeleton } from "@/components/featured-lyrics-skeleton";
 import { StatsDisplay } from "@/components/stat-display";
 import { StatDisplaySkeleton } from "@/components/stat-display-skeleton";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -22,19 +22,18 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row">
-            <Button
-              size="lg"
-              className="shadow-primary/20 rounded-full font-medium shadow-lg"
+            <Link
+              href="/lyrics"
+              className="bg-primary text-primary-foreground shadow-primary/20 hover:bg-primary/90 focus-visible:ring-ring inline-flex h-11 items-center justify-center rounded-full px-8 font-medium shadow-lg transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
               Find Lyrics
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-primary/30 hover:bg-primary/10 rounded-full"
+            </Link>
+            <Link
+              href="/popular"
+              className="border-primary/30 bg-background ring-offset-background hover:bg-primary/10 focus-visible:ring-ring inline-flex h-11 items-center justify-center rounded-full border px-8 font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
             >
               Popular Songs
-            </Button>
+            </Link>
           </div>
 
           <Suspense fallback={<StatDisplaySkeleton />}>
