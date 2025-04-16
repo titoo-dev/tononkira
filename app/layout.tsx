@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
+import NextTopLoader from "nextjs-toploader";
 import GlobalSearch from "@/components/search";
 
 const inter = Inter({
@@ -39,6 +40,11 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+          <NextTopLoader
+            showSpinner={false}
+            shadow={false}
+            color="var(--primary)"
+          />
           {/* Navigation */}
           <header className="border-border/40 bg-background/80 sticky top-0 z-40 border-b backdrop-blur-md">
             <div className="container mx-auto py-4">
