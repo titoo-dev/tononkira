@@ -1,5 +1,8 @@
+import { FeaturedLyricsSection } from "@/components/featured-lyrics-section";
+import { FeaturedLyricsSkeleton } from "@/components/featured-lyrics-skeleton";
+import { StatsDisplay } from "@/components/stat-display";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -33,17 +36,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 pt-8">
-            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-              <span className="text-sm font-medium">10K+ Lyrics</span>
-            </div>
-            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-              <span className="text-sm font-medium">500+ Artists</span>
-            </div>
-            <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-              <span className="text-sm font-medium">Easy Search</span>
-            </div>
-          </div>
+          <StatsDisplay />
         </div>
 
         <div className="relative flex-1">
@@ -78,63 +71,9 @@ export default function Home() {
       </section>
 
       {/* featured lyrics */}
-      <section className="py-16">
-        <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-3xl font-bold tracking-tight">Featured Lyrics</h2>
-          <Button variant="ghost" className="text-sm">
-            View all
-          </Button>
-        </div>
-
-        <div className="relative -mx-4 px-4">
-          <div className="overflow-hidden pb-6">
-            <div className="animate-marquee hover:pause flex space-x-6">
-              {Array.from({ length: 10 }).map((_, i) => {
-                const colors = [
-                  "bg-primary/10",
-                  "bg-secondary/10",
-                  "bg-accent/10",
-                  "bg-muted",
-                ];
-                const randomColor =
-                  colors[Math.floor(Math.random() * colors.length)];
-
-                return (
-                  <div
-                    key={i}
-                    className={`${randomColor} flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md`}
-                  >
-                    <div className="mb-3 flex items-center space-x-3">
-                      <div className="bg-foreground/10 flex h-10 w-10 items-center justify-center rounded-md">
-                        <span className="text-lg">♪</span>
-                      </div>
-                      <div>
-                        <h3 className="leading-none font-medium">
-                          Song Title {i + 1}
-                        </h3>
-                        <p className="text-muted-foreground text-xs">
-                          Artist Name
-                        </p>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="bg-foreground/10 h-2 w-full rounded-full"></div>
-                      <div className="bg-foreground/10 h-2 w-4/5 rounded-full"></div>
-                      <div className="bg-foreground/10 h-2 w-3/5 rounded-full"></div>
-                    </div>
-                    <Link href="/lyrics" className="mt-4 self-end">
-                      <Button variant="ghost" size="sm">
-                        View lyrics
-                      </Button>
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l to-transparent"></div>
-        </div>
-      </section>
+      <Suspense fallback={<FeaturedLyricsSkeleton />}>
+        <FeaturedLyricsSection />
+      </Suspense>
     </main>
   );
 }
