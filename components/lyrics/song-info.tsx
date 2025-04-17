@@ -1,4 +1,5 @@
 import { Eye } from "lucide-react";
+import { ActionButtons } from "./action-buttons";
 
 // Song header info component
 export const SongInfo = ({
