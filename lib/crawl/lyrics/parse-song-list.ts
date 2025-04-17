@@ -2,6 +2,7 @@ import * as cheerio from "cheerio";
 import { SongData } from "../types";
 import { BASE_URL } from "../main";
 import { fetchLyricsContentPage } from "./fetch-lyrics-content-page";
+import { processLyricsBlocks } from "./process-lyrics-blocks";
 
 /**
  * Parses lyrics links from a page
