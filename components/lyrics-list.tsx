@@ -18,6 +18,8 @@ export async function LyricsList({ currentPage }: Props) {
             key={`${song.id}-${index}`}
             title={song.title}
             artist={song.artists.at(0)?.name || "Unknown Artist"}
+            artistSlug={song.artists.at(0)?.slug || "unknown-artist"}
+            titleSlug={song.slug}
             color={
               index % 3 === 0
                 ? "primary"

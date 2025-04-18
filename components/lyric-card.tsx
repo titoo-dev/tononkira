@@ -6,9 +6,17 @@ interface LyricCardProps {
   title: string;
   artist: string;
   color: "primary" | "secondary" | "accent";
+  titleSlug: string;
+  artistSlug: string;
 }
 
-export function LyricCard({ title, artist, color }: LyricCardProps) {
+export function LyricCard({
+  title,
+  artist,
+  color,
+  titleSlug,
+  artistSlug,
+}: LyricCardProps) {
   const colorClasses = {
     primary: "bg-primary/10",
     secondary: "bg-secondary/10",
@@ -39,7 +47,7 @@ export function LyricCard({ title, artist, color }: LyricCardProps) {
 
       {/* View lyrics button */}
       <Link
-        href={`/lyrics/${title.toLowerCase().replace(/\s+/g, "-")}`}
+        href={`/lyrics/${artistSlug}/${titleSlug}`}
         className="mt-auto block w-full"
       >
         <Button
