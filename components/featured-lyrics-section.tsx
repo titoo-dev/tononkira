@@ -6,7 +6,6 @@ import {
 } from "@/lib/actions/get-latest-lyircs";
 import { formatDistanceToNow } from "date-fns";
 import { Music } from "lucide-react";
-import Image from "next/image";
 
 export async function FeaturedLyricsSection() {
   let latestSongs: LatestSongWithLyrics[] = [];
@@ -48,15 +47,7 @@ export async function FeaturedLyricsSection() {
                 >
                   <div className="mb-3 flex items-center space-x-3">
                     <div className="bg-foreground/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md">
-                      {song.album?.coverUrl ? (
-                        <Image
-                          src={song.album.coverUrl}
-                          alt={song.album.title}
-                          className="h-full w-full rounded-md object-cover"
-                        />
-                      ) : (
-                        <Music className="text-muted-foreground h-6 w-6" />
-                      )}
+                      <Music className="text-muted-foreground h-6 w-6" />
                     </div>
                     <div className="flex flex-col space-y-1 overflow-hidden">
                       <h3 className="text-foreground/90 leading-tight font-medium">
@@ -68,9 +59,7 @@ export async function FeaturedLyricsSection() {
                     </div>
                   </div>
                   <div className="text-muted-foreground space-y-2 text-xs">
-                    <p className="truncate">
-                      {song.lyric?.contentText?.substring(0, 60)}...
-                    </p>
+                    <p className="truncate">...</p>
                     <p>
                       Updated {formatDistanceToNow(new Date(song.updatedAt))}{" "}
                       ago
