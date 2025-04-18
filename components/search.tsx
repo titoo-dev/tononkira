@@ -158,7 +158,12 @@ export function GlobalSearch() {
             />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-[350px] p-0" align="end" sideOffset={8}>
+        <PopoverContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          className="w-[350px] p-0"
+          align="end"
+          sideOffset={8}
+        >
           <div className="bg-popover text-popover-foreground">
             {results.songs.length > 0 && (
               <ResultSection

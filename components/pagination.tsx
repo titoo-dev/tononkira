@@ -1,7 +1,7 @@
 "use client";
 
 import { cn, generatePagination } from "@/lib/utils";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 import {
   PaginationEllipsis,
@@ -18,6 +18,7 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
+  const router = useRouter();
 
   const params = useMemo(
     () => new URLSearchParams(searchParams),
@@ -25,9 +26,17 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
   );
 
   const createPageURL = (pageNumber: number | string) => {
-    params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
+    const newParams = new URLSearchParams(params);
+    newParams.set("page", pageNumber.toString());
+    return `${pathname}?${newParams.toString()}`;
   };
+
+  const handlePageChange =
+    (pageNumber: number | string) => (e: React.MouseEvent) => {
+      e.preventDefault();
+      const url = createPageURL(pageNumber);
+      router.push(url, { scroll: false });
+    };
 
   const allPages = generatePagination(currentPage, totalPages);
 
@@ -40,6 +49,9 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
             "pointer-events-none opacity-50": currentPage <= 1,
           })}
           href={createPageURL(currentPage - 1)}
+          onClick={
+            currentPage > 1 ? handlePageChange(currentPage - 1) : undefined
+          }
         />
 
         {/* Pages */}
@@ -55,6 +67,7 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
               key={`page-${page}`}
               href={createPageURL(page)}
               isActive={page === currentPage}
+              onClick={handlePageChange(page)}
             >
               {page}
             </PaginationLink>
@@ -68,6 +81,11 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
               currentPage === totalPages || !totalPages,
           })}
           href={createPageURL(currentPage + 1)}
+          onClick={
+            currentPage < totalPages
+              ? handlePageChange(currentPage + 1)
+              : undefined
+          }
         />
       </div>
     </nav>

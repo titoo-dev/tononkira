@@ -1,7 +1,5 @@
 import { Skeleton } from "./ui/skeleton";
 
-// filepath: c:/Users/PC/dev/tononkira/components/lyrics-list-skeleton.tsx
-
 /**
  * Skeleton loader component for the Lyrics List section
  * Displays placeholder UI while the actual content is loading
@@ -9,17 +7,10 @@ import { Skeleton } from "./ui/skeleton";
  */
 export function LyricsListSkeleton() {
   // Create an array of 8 items for the skeleton cards, matching the length in LyricsTabContent
-  const skeletonItems = Array.from({ length: 8 }, (_, i) => i);
+  const skeletonItems = Array.from({ length: 12 }, (_, i) => i);
 
   return (
     <div className="space-y-4">
-      {/* Skeleton for tab navigation */}
-      <div className="mb-6 flex items-center space-x-2 border-b">
-        {[1, 2, 3].map((item) => (
-          <Skeleton key={item} className="h-10 w-24 rounded-md" />
-        ))}
-      </div>
-
       {/* Grid layout matching the LyricsTabContent component */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {skeletonItems.map((item) => (
@@ -36,17 +27,8 @@ export function LyricsListSkeleton() {
               </div>
             </div>
 
-            {/* Progress bar section */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between">
-                <Skeleton className="h-3 w-16" />
-                <Skeleton className="h-3 w-8" />
-              </div>
-              <Skeleton className="h-2 w-full rounded-full" />
-            </div>
-
             {/* Button placeholder */}
-            <div className="mt-5 flex justify-end">
+            <div className="flex justify-start">
               <Skeleton className="h-8 w-24" />
             </div>
           </div>
