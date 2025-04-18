@@ -5,14 +5,10 @@ import { ActionButtons } from "./action-buttons";
 export const SongInfo = ({
   title,
   artists,
-  album,
-  releaseDate,
   views,
 }: {
   title: string;
   artists: Array<{ name: string; slug: string; id: number }>;
-  album: { title: string; releaseDate: Date | null } | null;
-  releaseDate: Date | null;
   views: number | null;
 }) => (
   <div className="space-y-5">
@@ -24,14 +20,6 @@ export const SongInfo = ({
         {artists.map((artist) => artist.name).join(", ")}
       </p>
     </div>
-
-    {(album || releaseDate) && (
-      <div className="text-muted-foreground flex items-center gap-2.5 text-sm">
-        {album && <span>{album.title}</span>}
-        {album && releaseDate && <span>•</span>}
-        {releaseDate && <span>{new Date(releaseDate).getFullYear()}</span>}
-      </div>
-    )}
 
     <div className="text-muted-foreground flex items-center gap-5 text-sm">
       <div className="flex items-center gap-1.5">

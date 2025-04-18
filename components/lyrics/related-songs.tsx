@@ -11,8 +11,8 @@ export const RelatedSongs = ({
   artistSlug: string;
 }) => (
   <div className="max-w-sm space-y-5 pt-4">
-    <h3 className="text-foreground/90 text-lg font-semibold">
-      More from {artistName}
+    <h3 className="text-foreground/90 text-lg">
+      <span className="font-bold">More from</span> {artistName}
     </h3>
     <div className="space-y-2">
       {/* This would be populated from a separate API call to get more songs by this artist */}

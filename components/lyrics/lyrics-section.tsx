@@ -197,10 +197,6 @@ const LyricsFooter = () => {
           <Maximize2 className="mr-2 h-3.5 w-3.5" />
           Full screen
         </Button>
-        <Button size="sm" className="rounded-full text-sm">
-          <Printer className="mr-2 h-3.5 w-3.5" />
-          Print lyrics
-        </Button>
       </div>
     </div>
   );

@@ -46,8 +46,6 @@ export default async function LyricsPage(props: {
           <SongInfo
             title={songData.title}
             artists={songData.artists}
-            album={songData.album}
-            releaseDate={songData.album?.releaseDate ?? null}
             views={songData.views}
           />
           {songData.artists.length > 0 && (
