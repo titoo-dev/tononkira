@@ -6,21 +6,10 @@ export type LatestSongWithLyrics = {
   slug: string;
   views: number | null;
   updatedAt: Date;
-  lyric: {
-    id: number;
-    content: string;
-    contentText: string | null;
-    language: string;
-  } | null;
-  album: {
-    title: string;
-    coverUrl: string | null;
-  } | null;
   artists: {
     id: number;
     name: string;
     slug: string;
-    imageUrl: string | null;
   }[];
 };
 
@@ -41,26 +30,11 @@ export async function getLatestSongs(): Promise<LatestSongWithLyrics[]> {
         slug: true,
         views: true,
         updatedAt: true,
-        lyric: {
-          select: {
-            id: true,
-            content: true,
-            contentText: true,
-            language: true,
-          },
-        },
-        album: {
-          select: {
-            title: true,
-            coverUrl: true,
-          },
-        },
         artists: {
           select: {
             id: true,
             name: true,
             slug: true,
-            imageUrl: true,
           },
         },
       },
