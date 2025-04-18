@@ -47,7 +47,7 @@ export async function FeaturedLyricsSection() {
                   className={`${randomColor} flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md`}
                 >
                   <div className="mb-3 flex items-center space-x-3">
-                    <div className="bg-foreground/10 flex h-10 w-10 items-center justify-center rounded-md">
+                    <div className="bg-foreground/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md">
                       {song.album?.coverUrl ? (
                         <Image
                           src={song.album.coverUrl}
@@ -58,9 +58,11 @@ export async function FeaturedLyricsSection() {
                         <Music className="text-muted-foreground h-6 w-6" />
                       )}
                     </div>
-                    <div>
-                      <h3 className="leading-none font-medium">{song.title}</h3>
-                      <p className="text-muted-foreground text-xs">
+                    <div className="flex flex-col space-y-1 overflow-hidden">
+                      <h3 className="text-foreground/90 leading-tight font-medium">
+                        {song.title}
+                      </h3>
+                      <p className="text-muted-foreground truncate overflow-hidden text-xs text-ellipsis whitespace-nowrap">
                         {song.artists.map((artist) => artist.name).join(", ")}
                       </p>
                     </div>
