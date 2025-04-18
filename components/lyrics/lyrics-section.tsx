@@ -9,7 +9,6 @@ import {
   MicVocal,
   Pause,
   Play,
-  Printer,
   SkipBack,
 } from "lucide-react";
 
