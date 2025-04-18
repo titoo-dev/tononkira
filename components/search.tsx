@@ -10,68 +10,54 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState, useEffect, useRef } from "react";
-import { Music, User, FileText } from "lucide-react";
+import { Music, User } from "lucide-react";
+import { useDebounce } from "use-debounce";
+import Link from "next/link";
+/**
+ * Type definitions for search results
+ */
+interface Song {
+  id: number;
+  title: string;
+  artist: string;
+  slug: string;
+  artists: Artist[];
+}
 
-const dummyData = {
-  songs: [
-    { id: 1, title: "Ombalahibemaso", artist: "Njakatiana" },
-    { id: 2, title: "Masoandro", artist: "Tarika" },
-    { id: 3, title: "Tsy Hanadino", artist: "Bodo" },
-    { id: 4, title: "Ampela Zandriko", artist: "Reko" },
-  ],
-  artists: [
-    { id: 1, name: "Njakatiana", songCount: 24 },
-    { id: 2, name: "Tarika", songCount: 18 },
-    { id: 3, name: "Bodo", songCount: 15 },
-    { id: 4, name: "Reko", songCount: 12 },
-  ],
-  lyrics: [
-    {
-      id: 1,
-      content: "Tsisy hita hatramin'izay...",
-      songTitle: "Ombalahibemaso",
-      artist: "Njakatiana",
-    },
-    {
-      id: 2,
-      content: "Ny masoandro mamiratra...",
-      songTitle: "Masoandro",
-      artist: "Tarika",
-    },
-    {
-      id: 3,
-      content: "Tsy hanadino anao mandrakizay...",
-      songTitle: "Tsy Hanadino",
-      artist: "Bodo",
-    },
-    {
-      id: 4,
-      content: "Ampela zandriko malala...",
-      songTitle: "Ampela Zandriko",
-      artist: "Reko",
-    },
-  ],
-};
+interface Artist {
+  id: number;
+  name: string;
+  songCount: number;
+  slug: string;
+}
+
+interface Lyric {
+  id: number;
+  content: string;
+  songTitle: string;
+  artist: string;
+}
+
+interface SearchResults {
+  songs: Song[];
+  artists: Artist[];
+  lyrics: Lyric[];
+}
+
 /**
  * Instant Search component for searching lyrics with popover results
  *
  * Displays results grouped by song title, artist, and lyrics content
- * Uses dummy data for demonstration purposes
+ * Fetches data from the API endpoint
  * Styled according to shadcn UI design
  * Responsive - hidden on mobile, visible on medium screens and up
  */
 export function GlobalSearch() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [results, setResults] = useState<{
-    songs: { id: number; title: string; artist: string }[];
-    artists: { id: number; name: string; songCount: number }[];
-    lyrics: {
-      id: number;
-      content: string;
-      songTitle: string;
-      artist: string;
-    }[];
-  }>({
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [debouncedQuery] = useDebounce(searchQuery, 300);
+  const [results, setResults] = useState<SearchResults>({
     songs: [],
     artists: [],
     lyrics: [],
@@ -80,41 +66,39 @@ export function GlobalSearch() {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Search logic - filter results based on search query
+  // Fetch search results from API
   useEffect(() => {
-    if (searchQuery.length < 2) {
-      setResults({ songs: [], artists: [], lyrics: [] });
-      return;
+    async function fetchSearchResults() {
+      if (debouncedQuery.length < 2) {
+        setResults({ songs: [], artists: [], lyrics: [] });
+        return;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `/api?q=${encodeURIComponent(debouncedQuery)}`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`Search failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setResults(data);
+      } catch (err) {
+        console.error("Search error:", err);
+        setError("Failed to fetch search results");
+        setResults({ songs: [], artists: [], lyrics: [] });
+      } finally {
+        setIsLoading(false);
+      }
     }
 
-    const query = searchQuery.toLowerCase();
-
-    // Filter songs
-    const filteredSongs = dummyData.songs.filter(
-      (song) =>
-        song.title.toLowerCase().includes(query) ||
-        song.artist.toLowerCase().includes(query),
-    );
-
-    // Filter artists
-    const filteredArtists = dummyData.artists.filter((artist) =>
-      artist.name.toLowerCase().includes(query),
-    );
-
-    // Filter lyrics
-    const filteredLyrics = dummyData.lyrics.filter(
-      (lyric) =>
-        lyric.content.toLowerCase().includes(query) ||
-        lyric.songTitle.toLowerCase().includes(query) ||
-        lyric.artist.toLowerCase().includes(query),
-    );
-
-    setResults({
-      songs: filteredSongs,
-      artists: filteredArtists,
-      lyrics: filteredLyrics,
-    });
-  }, [searchQuery]);
+    fetchSearchResults();
+  }, [debouncedQuery]);
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -140,8 +124,8 @@ export function GlobalSearch() {
     results.lyrics.length > 0;
 
   return (
-    <div className="relative hidden md:block">
-      <Popover open={hasResult || isOpen}>
+    <div className="relative hidden md:block" ref={popoverRef}>
+      <Popover open={isOpen || hasResult}>
         <PopoverTrigger asChild>
           <div className="relative">
             <SearchIcon
@@ -151,7 +135,10 @@ export function GlobalSearch() {
             <Input
               type="search"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsOpen(true);
+              }}
               placeholder="Search lyrics..."
               className="bg-muted/50 w-[220px] rounded-full pl-10"
               aria-label="Search lyrics"
@@ -165,7 +152,19 @@ export function GlobalSearch() {
           sideOffset={8}
         >
           <div className="bg-popover text-popover-foreground">
-            {results.songs.length > 0 && (
+            {isLoading && (
+              <div className="flex justify-center p-4">
+                <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"></div>
+              </div>
+            )}
+
+            {error && (
+              <div className="text-destructive p-4 text-center text-sm">
+                {error}
+              </div>
+            )}
+
+            {!isLoading && !error && results.songs.length > 0 && (
               <ResultSection
                 title="Songs"
                 icon={<Music className="text-primary h-4 w-4" />}
@@ -173,13 +172,14 @@ export function GlobalSearch() {
                   id: song.id,
                   primary: song.title,
                   secondary: song.artist,
+                  artistSlug: song.artists[0].slug,
+                  lyricSlug: song.slug,
                 }))}
                 colorClass="bg-primary/10"
-                onSelect={(item) => console.log(item)}
               />
             )}
 
-            {results.artists.length > 0 && (
+            {!isLoading && !error && results.artists.length > 0 && (
               <ResultSection
                 title="Artists"
                 icon={<User className="text-secondary h-4 w-4" />}
@@ -187,38 +187,32 @@ export function GlobalSearch() {
                   id: artist.id,
                   primary: artist.name,
                   secondary: `${artist.songCount} songs`,
+                  artistSlug: artist.slug,
                 }))}
                 colorClass="bg-secondary/10"
-                onSelect={(item) => console.log(item)}
               />
             )}
 
-            {results.lyrics.length > 0 && (
-              <ResultSection
-                title="Lyrics"
-                icon={<FileText className="text-accent h-4 w-4" />}
-                items={results.lyrics.map((lyric) => ({
-                  id: lyric.id,
-                  primary: lyric.songTitle,
-                  secondary: `${lyric.artist} • ${lyric.content.substring(0, 20)}...`,
-                }))}
-                colorClass="bg-accent/10"
-                onSelect={(item) => console.log(item)}
-              />
+            {!isLoading && !error && !hasResult && searchQuery.length >= 2 && (
+              <div className="text-muted-foreground p-4 text-center text-sm">
+                No results found for &quot;{searchQuery}&quot;
+              </div>
             )}
 
-            <div className="border-t p-2">
-              <Button
-                variant="ghost"
-                className="text-muted-foreground hover:text-foreground w-full justify-center text-sm"
-                onClick={() => {
-                  console.log("View all results");
-                  setIsOpen(false);
-                }}
-              >
-                View all results
-              </Button>
-            </div>
+            {hasResult && (
+              <div className="border-t p-2">
+                <Button
+                  variant="ghost"
+                  className="text-muted-foreground hover:text-foreground w-full justify-center text-sm"
+                  onClick={() => {
+                    console.log("View all results");
+                    setIsOpen(false);
+                  }}
+                >
+                  View all results
+                </Button>
+              </div>
+            )}
           </div>
         </PopoverContent>
       </Popover>
@@ -233,18 +227,13 @@ interface ResultSectionProps {
     id: number;
     primary: string;
     secondary: string;
+    artistSlug?: string;
+    lyricSlug?: string;
   }[];
   colorClass: string;
-  onSelect: (item: { id: number; primary: string; secondary: string }) => void;
 }
 
-function ResultSection({
-  title,
-  icon,
-  items,
-  colorClass,
-  onSelect,
-}: ResultSectionProps) {
+function ResultSection({ title, icon, items, colorClass }: ResultSectionProps) {
   return (
     <div className="py-2">
       <div className="flex items-center px-4 py-1.5">
@@ -255,24 +244,27 @@ function ResultSection({
       </div>
       <div className="space-y-1 px-1">
         {items.map((item) => (
-          <Button
+          <Link
             key={item.id}
-            variant="ghost"
-            className="w-full justify-start rounded-sm px-3 py-5 text-left"
-            onClick={() => onSelect(item)}
+            href={`/lyrics/${item.artistSlug}/${item.lyricSlug}`}
           >
-            <div
-              className={`mr-3 flex h-8 w-8 items-center justify-center rounded-md ${colorClass}`}
+            <Button
+              variant="ghost"
+              className="w-full justify-start rounded-sm px-3 py-5 text-left"
             >
-              {icon}
-            </div>
-            <div className="truncate">
-              <div className="font-medium">{item.primary}</div>
-              <div className="text-muted-foreground text-xs">
-                {item.secondary}
+              <div
+                className={`mr-3 flex h-8 w-8 items-center justify-center rounded-md ${colorClass}`}
+              >
+                {icon}
               </div>
-            </div>
-          </Button>
+              <div className="truncate">
+                <div className="font-medium">{item.primary}</div>
+                <div className="text-muted-foreground text-xs">
+                  {item.secondary}
+                </div>
+              </div>
+            </Button>
+          </Link>
         ))}
       </div>
     </div>
