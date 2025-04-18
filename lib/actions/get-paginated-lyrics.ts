@@ -1,7 +1,7 @@
 import { Prisma } from "../generated/prisma";
 import { prisma } from "../prisma";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 12;
 
 export type SortOption = "popular" | "recent" | "alphabetical";
 

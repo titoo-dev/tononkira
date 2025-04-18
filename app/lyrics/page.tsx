@@ -23,7 +23,7 @@ export default async function LyricsPage(props: {
 
       <div className="mb-8">
         <h2 className="mb-6 text-2xl font-semibold">Browse Lyrics</h2>
-        <TabNav defaultValue="popular" />
+        <TabNav defaultValue="popular" currentPage={currentPage} />
       </div>
 
       <div className="mt-8">

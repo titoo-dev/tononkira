@@ -7,9 +7,10 @@ import { LyricsTabContent } from "./lyrics-tab-content";
 // Tab navigation components
 interface TabNavProps {
   defaultValue: string;
+  currentPage: number;
 }
 
-export function TabNav({ defaultValue }: TabNavProps) {
+export function TabNav({ defaultValue, currentPage }: TabNavProps) {
   return (
     <Tabs defaultValue={defaultValue} className="w-full">
       <div className="mb-6 flex items-center justify-between border-b">
@@ -37,24 +38,11 @@ export function TabNav({ defaultValue }: TabNavProps) {
         <ViewSelector />
       </div>
 
-      <LyricsTabContent
-        value="popular"
-        colorMapping={(i) =>
-          i % 3 === 0 ? "primary" : i % 3 === 1 ? "secondary" : "accent"
-        }
-      />
-      <LyricsTabContent
-        value="recent"
-        colorMapping={(i) =>
-          i % 3 === 0 ? "accent" : i % 3 === 1 ? "primary" : "secondary"
-        }
-      />
+      <LyricsTabContent value="popular" currentPage={currentPage} />
+      <LyricsTabContent value="recent" currentPage={currentPage} />
       <LyricsTabContent
         value="alphabetical"
-        colorMapping={(i) =>
-          i % 3 === 0 ? "secondary" : i % 3 === 1 ? "accent" : "primary"
-        }
-        titleMapping={(i) => `Song ${String.fromCharCode(65 + i)} Title`}
+        currentPage={currentPage} // Pass the current
       />
     </Tabs>
   );
