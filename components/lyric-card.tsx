@@ -21,14 +21,19 @@ export function LyricCard({ title, artist, color }: LyricCardProps) {
     >
       {/* Artist and song info section with icon */}
       <div className="mb-4 flex items-center gap-3">
-        <div className="bg-foreground/10 flex h-11 w-11 items-center justify-center rounded-md">
+        <div className="bg-foreground/10 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md">
           <Music className="text-foreground/80 h-5 w-5" />
         </div>
-        <div>
+        <div className="flex flex-col space-y-1 overflow-hidden">
           <h3 className="text-foreground/90 leading-tight font-medium">
             {title}
           </h3>
-          <p className="text-muted-foreground text-xs">{artist}</p>
+          <p
+            className="text-muted-foreground truncate overflow-hidden text-xs text-ellipsis whitespace-nowrap"
+            title={artist}
+          >
+            {artist}
+          </p>
         </div>
       </div>
 
