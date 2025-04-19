@@ -10,6 +10,7 @@ import {
   Pause,
   Play,
   SkipBack,
+  Sparkles,
 } from "lucide-react";
 
 // LyricsHeader component
@@ -38,13 +39,23 @@ const LyricsHeader = ({
           variant={isKaraokeMode ? "secondary" : "ghost"}
           size="icon"
           onClick={() => setIsKaraokeMode(!isKaraokeMode)}
-          className="h-8 w-8 rounded-full"
+          className={`h-8 w-8 rounded-full transition-all duration-300 ${
+            isKaraokeMode
+              ? "bg-secondary text-secondary-foreground shadow-md"
+              : "hover:ring-primary/50 hover:bg-background/90 hover:ring-2"
+          } relative`}
           aria-pressed={isKaraokeMode}
           aria-label={
             isKaraokeMode ? "Disable Karaoke Mode" : "Enable Karaoke Mode"
           }
         >
-          <MicVocal className="h-4 w-4" />
+          {/* Pulsing ring animation when not in karaoke mode */}
+          {!isKaraokeMode && (
+            <span className="ring-primary/30 absolute inset-0 animate-pulse rounded-full ring-2" />
+          )}
+          <MicVocal
+            className={`h-4 w-4 ${isKaraokeMode ? "" : "text-primary"}`}
+          />
           <span className="sr-only">
             {isKaraokeMode ? "Disable Karaoke Mode" : "Enable Karaoke Mode"}
           </span>
@@ -80,9 +91,13 @@ const LyricsHeader = ({
             </Button>
           </>
         )}
-        <Button variant="ghost" size="sm">
+        <Button variant="outline" size="sm" className="text-primary">
           <FileEdit className="mr-2 h-4 w-4" />
           Suggest correction
+        </Button>
+        <Button variant="outline" size="sm" className="text-primary">
+          <Sparkles className="mr-2 h-4 w-4" />
+          Fix with AI
         </Button>
       </div>
     </div>
