@@ -9,6 +9,10 @@ import { SongArtwork } from "@/components/lyrics/song-artwork";
 import { SongInfo } from "@/components/lyrics/song-info";
 import { RelatedSongs } from "@/components/lyrics/related-songs";
 import { SimilarSongsSection } from "@/components/lyrics/similar-songs-section";
+import {
+  ArtistWithSongs,
+  getLyricsByArtistSlug,
+} from "@/lib/actions/get-lyrics-by-artist-slug";
 
 export default async function LyricsPage(props: {
   params: Promise<{ artist: string; slug: string }>;
@@ -17,12 +21,14 @@ export default async function LyricsPage(props: {
 
   const { artist, slug } = params;
 
-  // Fetch song data using the server action
   let songData: SongWithLyricsDetail | null;
+  let artistData: ArtistWithSongs | null;
 
   try {
     songData = await getLyricsBySlug(artist, slug);
-    if (!songData) {
+    artistData = await getLyricsByArtistSlug(artist);
+    console.log("artistData", artistData);
+    if (!songData || !artistData) {
       notFound();
     }
   } catch (error) {
@@ -32,6 +38,7 @@ export default async function LyricsPage(props: {
 
   // Transform lyrics content from string to array of lines
   const lyricsData = JSON.parse(songData.lyric!.content);
+
   return (
     <main className="container mx-auto px-6 py-12">
       <BackNavigation />
@@ -48,12 +55,7 @@ export default async function LyricsPage(props: {
             artists={songData.artists}
             views={songData.views}
           />
-          {songData.artists.length > 0 && (
-            <RelatedSongs
-              artistName={songData.artists[0].name}
-              artistSlug={songData.artists[0].slug}
-            />
-          )}
+          {songData.artists.length > 0 && <RelatedSongs data={artistData} />}
         </div>
 
         {/* Right column with lyrics */}
