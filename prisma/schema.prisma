@@ -18,37 +18,20 @@ model Artist {
   imageUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  albums    Album[]  @relation("ArtistToAlbum")
   songs     Song[]   @relation("ArtistToSong")
 
   @@index([name])
 }
 
-model Album {
-  id          Int       @id @default(autoincrement())
-  title       String
-  releaseDate DateTime?
-  coverUrl    String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  songs       Song[]
-  artists     Artist[]  @relation("ArtistToAlbum")
-
-  @@unique([title, releaseDate])
-}
-
 model Song {
   id          Int      @id @default(autoincrement())
   title       String
-  duration    Int?
-  albumId     Int?
   slug        String
   trackNumber Int?
   views       Int?     @default(0)
   lyricId     Int?     @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  album       Album?   @relation(fields: [albumId], references: [id])
   lyric       Lyric?   @relation(fields: [lyricId], references: [id])
   artists     Artist[] @relation("ArtistToSong")
 }
