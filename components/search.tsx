@@ -171,7 +171,7 @@ export function GlobalSearch() {
                 items={results.songs.map((song) => ({
                   id: song.id,
                   primary: song.title,
-                  secondary: song.artist,
+                  secondary: song.artists[0].name,
                   artistSlug: song.artists[0].slug,
                   lyricSlug: song.slug,
                 }))}
@@ -235,7 +235,7 @@ interface ResultSectionProps {
 
 function ResultSection({ title, icon, items, colorClass }: ResultSectionProps) {
   return (
-    <div className="py-2">
+    <div className="flex flex-col gap-2 py-2">
       <div className="flex items-center px-4 py-1.5">
         <div className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
           {icon}
@@ -253,7 +253,7 @@ function ResultSection({ title, icon, items, colorClass }: ResultSectionProps) {
               className="w-full justify-start rounded-sm px-3 py-5 text-left"
             >
               <div
-                className={`mr-3 flex h-8 w-8 items-center justify-center rounded-md ${colorClass}`}
+                className={`mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md ${colorClass}`}
               >
                 {icon}
               </div>

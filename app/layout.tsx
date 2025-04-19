@@ -59,8 +59,8 @@ export default async function RootLayout({
                     src="/brand.png"
                     alt="Tononkira Logo"
                     width={120}
-                    height={120}
-                    className="h-26 object-cover"
+                    height={60}
+                    className="h-16 object-cover"
                   />
                 </Link>
 
