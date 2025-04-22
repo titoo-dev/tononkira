@@ -45,7 +45,12 @@ export const FixWithAIButton: React.FC<FixWithAIButtonProps> = ({
         setIsLoading(false);
       }
     } catch (error) {
-      toast.error(`Failed to fix lyrics: ${(error as Error).message}`);
+      const errorMessage =
+        process.env.NODE_ENV === "production"
+          ? "Failed to fix lyrics. Please try again later."
+          : `Failed to fix lyrics: ${(error as Error).message}`;
+
+      toast.error(errorMessage);
       setIsLoading(false);
     }
   };
