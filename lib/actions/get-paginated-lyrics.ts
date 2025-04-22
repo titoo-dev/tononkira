@@ -16,11 +16,6 @@ export type PaginatedLyricsResult = {
       id: number;
       language: string;
     } | null;
-    album: {
-      title: string | null;
-      coverUrl: string | null;
-      releaseDate: Date | null;
-    } | null;
     artists: {
       id: number;
       name: string;
@@ -84,13 +79,6 @@ export async function getPaginatedLyrics(
           select: {
             id: true,
             language: true,
-          },
-        },
-        album: {
-          select: {
-            title: true,
-            coverUrl: true,
-            releaseDate: true,
           },
         },
         artists: {

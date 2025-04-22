@@ -7,7 +7,6 @@ export type SongWithLyricsDetail = {
   title: string;
   slug: string;
   views: number | null;
-  duration: number | null;
   trackNumber: number | null;
   createdAt: Date;
   updatedAt: Date;
@@ -18,12 +17,6 @@ export type SongWithLyricsDetail = {
     language: string;
     isSynced: boolean;
     url: string;
-  } | null;
-  album: {
-    id: number;
-    title: string;
-    coverUrl: string | null;
-    releaseDate: Date | null;
   } | null;
   artists: {
     id: number;
@@ -62,7 +55,6 @@ export async function getLyricsBySlug(
         title: true,
         slug: true,
         views: true,
-        duration: true,
         trackNumber: true,
         createdAt: true,
         updatedAt: true,
@@ -74,14 +66,6 @@ export async function getLyricsBySlug(
             language: true,
             isSynced: true,
             url: true,
-          },
-        },
-        album: {
-          select: {
-            id: true,
-            title: true,
-            coverUrl: true,
-            releaseDate: true,
           },
         },
         artists: {

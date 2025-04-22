@@ -15,13 +15,7 @@ export type Song = {
   title: string;
   slug: string;
   views: number | null;
-  duration: number | null;
   trackNumber: number | null;
-  album: {
-    id: number;
-    title: string;
-    coverUrl: string | null;
-  } | null;
   lyric: {
     id: number;
     language: string;
@@ -59,15 +53,7 @@ export async function getLyricsByArtistSlug(
             title: true,
             slug: true,
             views: true,
-            duration: true,
             trackNumber: true,
-            album: {
-              select: {
-                id: true,
-                title: true,
-                coverUrl: true,
-              },
-            },
             lyric: {
               select: {
                 id: true,
@@ -76,11 +62,7 @@ export async function getLyricsByArtistSlug(
               },
             },
           },
-          orderBy: [
-            { album: { title: "asc" } },
-            { trackNumber: "asc" },
-            { title: "asc" },
-          ],
+          orderBy: [{ trackNumber: "asc" }, { title: "asc" }],
         },
       },
     });
