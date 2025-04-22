@@ -27,7 +27,6 @@ export default async function LyricsPage(props: {
   try {
     songData = await getLyricsBySlug(artist, slug);
     songByArtistData = await getLyricsByArtistSlug(artist);
-    console.log("artistData", songByArtistData);
     if (!songData || !songByArtistData) {
       notFound();
     }
