@@ -43,7 +43,7 @@ export const SimilarSongsSection = () => (
             variant="outline"
             className="border-primary/20 hover:bg-primary/5 mt-6"
           >
-            Get notified when it's ready
+            Get notified when it&apos;s ready
           </Button>
         </div>
       </div>
