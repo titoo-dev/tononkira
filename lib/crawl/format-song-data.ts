@@ -18,7 +18,6 @@ export function formatSongData(songData: SongData): CreateSongInput {
         slug: slugify(songData.artist.name),
       },
     ],
-    album: { title: "Unknown Album" },
     lyrics: {
       content: songData.song.lyrics || "No lyrics available",
       createdBy: "Unknown User",
