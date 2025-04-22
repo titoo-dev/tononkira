@@ -10,14 +10,7 @@ export type SongWithLyricsDetail = {
   trackNumber: number | null;
   createdAt: Date;
   updatedAt: Date;
-  lyric: {
-    id: number;
-    content: string;
-    contentText: string | null;
-    language: string;
-    isSynced: boolean;
-    url: string;
-  } | null;
+  lyric: Lyric | null;
   artists: {
     id: number;
     name: string;
@@ -25,6 +18,15 @@ export type SongWithLyricsDetail = {
     imageUrl: string | null;
     bio: string | null;
   }[];
+};
+
+export type Lyric = {
+  id: number;
+  content: string;
+  contentText: string | null;
+  language: string;
+  isSynced: boolean;
+  url: string;
 };
 
 /**

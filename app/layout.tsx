@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@clerk/nextjs/server";
 import NextTopLoader from "nextjs-toploader";
 import GlobalSearch from "@/components/search";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -94,9 +95,7 @@ export default async function RootLayout({
               </div>
             </div>
           </header>
-
           <div className="bg-background text-foreground">{children}</div>
-
           {/* Footer */}
           <footer className="border-border/40 bg-background/80 border-t backdrop-blur-sm">
             <div className="container mx-auto py-8">
@@ -149,6 +148,7 @@ export default async function RootLayout({
               </div>
             </div>
           </footer>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

@@ -11,11 +11,11 @@ Tu es un expert en extraction de paroles de chansons malgaches. Voici le texte b
 Analyse le contenu et renvoie UNIQUEMENT un JSON structuré avec ces règles :
 1. Format :
 {
-  "paroles": [
+  "content": [
     {
       "type": "couplet" | "refrain" | "pont" | "introduction",
-      "numero": (optionnel, pour les couplets),
-      "vers": ["ligne 1", "ligne 2", ...]
+      "verseNumber": (optionnel, pour les couplets),
+      "content": ["ligne 1", "ligne 2", ...]
     },
     ...
   ]

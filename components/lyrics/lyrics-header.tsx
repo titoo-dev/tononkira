@@ -1,15 +1,10 @@
-import {
-  FileEdit,
-  MicVocal,
-  Pause,
-  Play,
-  SkipBack,
-  Sparkles,
-} from "lucide-react";
+import { FileEdit, MicVocal, Pause, Play, SkipBack } from "lucide-react";
 import { Button } from "../ui/button";
+import { FixWithAIButton } from "./fix-with-ai-button";
 
 // LyricsHeader component
 interface LyricsHeaderProps {
+  lyricId: number;
   isKaraokeMode: boolean;
   setIsKaraokeMode: (value: boolean) => void;
   isPlaying: boolean;
@@ -23,6 +18,7 @@ export const LyricsHeader = ({
   isPlaying,
   handlePlayPause,
   handleRestart,
+  lyricId,
 }: LyricsHeaderProps) => {
   return (
     <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center md:mb-6">
@@ -90,10 +86,7 @@ export const LyricsHeader = ({
           <FileEdit className="mr-2 h-4 w-4" />
           Suggest correction
         </Button>
-        <Button variant="outline" size="sm" className="text-primary">
-          <Sparkles className="mr-2 h-4 w-4" />
-          Fix with AI
-        </Button>
+        <FixWithAIButton lyricId={lyricId} />
       </div>
     </div>
   );

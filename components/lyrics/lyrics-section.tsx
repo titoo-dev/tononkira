@@ -5,6 +5,8 @@ import { LyricsFooter } from "./lyrics-footer";
 import { LyricsHeader } from "./lyrics-header";
 import { KaraokeMode } from "./karaoke-mode";
 import { StandardLyricsView } from "./standard-lyrics-view";
+import { Lyric } from "@/lib/actions/get-lyrics-by-slug";
+import { LyricsAnalysis } from "@/lib/crawl/types";
 
 // Main LyricsSection component
 export interface Verse {
@@ -14,12 +16,11 @@ export interface Verse {
 }
 
 export interface LyricsSectionProps {
-  lyrics: {
-    content: Verse[];
-  };
+  lyric: Lyric;
 }
 
-export const LyricsSection = ({ lyrics }: LyricsSectionProps) => {
+export const LyricsSection = ({ lyric }: LyricsSectionProps) => {
+  const lyrics: LyricsAnalysis = JSON.parse(lyric.content);
   const [isKaraokeMode, setIsKaraokeMode] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -123,6 +124,7 @@ export const LyricsSection = ({ lyrics }: LyricsSectionProps) => {
   return (
     <div className="bg-card/50 overflow-hidden rounded-xl border p-4 shadow-sm backdrop-blur-sm md:col-span-2 md:p-6">
       <LyricsHeader
+        lyricId={lyric.id}
         isKaraokeMode={isKaraokeMode}
         setIsKaraokeMode={setIsKaraokeMode}
         isPlaying={isPlaying}
