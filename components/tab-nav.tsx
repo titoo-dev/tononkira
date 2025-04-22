@@ -1,7 +1,6 @@
 import { CalendarIcon, Disc, Users } from "lucide-react";
 import { CustomTab } from "./custom-tab";
 import { Tabs, TabsContent, TabsList } from "./ui/tabs";
-import { ViewSelector } from "./view-selector";
 import { LyricsTabContent } from "./lyrics-tab-content";
 import { Suspense } from "react";
 import { LyricsListSkeleton } from "./lyrics-list-skeleton";
@@ -48,8 +47,6 @@ export function TabNav({ defaultValue, currentPage }: TabNavProps) {
             />
           ))}
         </TabsList>
-
-        <ViewSelector />
       </div>
 
       {tabs.map((tab, index) => (
