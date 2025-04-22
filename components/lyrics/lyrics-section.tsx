@@ -141,7 +141,18 @@ export const LyricsSection = ({ lyrics }: LyricsSectionProps) => {
         <StandardLyricsView lyrics={flatLyrics} />
       )}
 
-      <LyricsFooter />
+      <LyricsFooter
+        isKaraokeMode={isKaraokeMode}
+        lastUpdated="2023-06-15" // Replace with actual last updated date or pass it as a prop to LyricsSection
+        onFullScreenClick={() => {
+          // Handle full screen functionality here
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.error(
+              `Error attempting to enable full-screen mode: ${err.message}`,
+            );
+          });
+        }}
+      />
     </div>
   );
 };
