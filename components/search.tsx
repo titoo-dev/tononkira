@@ -1,18 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Search as SearchIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover } from "@/components/ui/popover";
 import { useState, useEffect, useRef } from "react";
-import { Music, User } from "lucide-react";
 import { useDebounce } from "use-debounce";
-import Link from "next/link";
+import { SearchTrigger } from "./search/search-trigger";
+import { SearchResultsContent } from "./search/result";
 /**
  * Type definitions for search results
  */
@@ -38,7 +31,7 @@ interface Lyric {
   artist: string;
 }
 
-interface SearchResults {
+export interface SearchResults {
   songs: Song[];
   artists: Artist[];
   lyrics: Lyric[];
@@ -56,7 +49,7 @@ export function GlobalSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [debouncedQuery] = useDebounce(searchQuery, 300);
+  const [debouncedQuery] = useDebounce(searchQuery, 240);
   const [results, setResults] = useState<SearchResults>({
     songs: [],
     artists: [],
@@ -66,7 +59,6 @@ export function GlobalSearch() {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Fetch search results from API
   useEffect(() => {
     async function fetchSearchResults() {
       if (debouncedQuery.length < 2) {
@@ -100,7 +92,6 @@ export function GlobalSearch() {
     fetchSearchResults();
   }, [debouncedQuery]);
 
-  // Close popover when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -123,150 +114,30 @@ export function GlobalSearch() {
     results.artists.length > 0 ||
     results.lyrics.length > 0;
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setIsOpen(true);
+  };
+
   return (
     <div className="relative hidden md:block" ref={popoverRef}>
       <Popover open={isOpen || hasResult}>
-        <PopoverTrigger asChild>
-          <div className="relative">
-            <SearchIcon
-              aria-hidden="true"
-              className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
-            />
-            <Input
-              type="search"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setIsOpen(true);
-              }}
-              placeholder="Search lyrics..."
-              className="bg-muted/50 w-[220px] rounded-full pl-10"
-              aria-label="Search lyrics"
-            />
-          </div>
-        </PopoverTrigger>
-        <PopoverContent
-          onOpenAutoFocus={(e) => e.preventDefault()}
-          className="w-[350px] p-0"
-          align="end"
-          sideOffset={8}
-        >
-          <div className="bg-popover text-popover-foreground">
-            {isLoading && (
-              <div className="flex justify-center p-4">
-                <div className="border-primary h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"></div>
-              </div>
-            )}
-
-            {error && (
-              <div className="text-destructive p-4 text-center text-sm">
-                {error}
-              </div>
-            )}
-
-            {!isLoading && !error && results.songs.length > 0 && (
-              <ResultSection
-                title="Songs"
-                icon={<Music className="text-primary h-4 w-4" />}
-                items={results.songs.map((song) => ({
-                  id: song.id,
-                  primary: song.title,
-                  secondary: song.artists[0].name,
-                  artistSlug: song.artists[0].slug,
-                  lyricSlug: song.slug,
-                }))}
-                colorClass="bg-primary/10"
-              />
-            )}
-
-            {!isLoading && !error && results.artists.length > 0 && (
-              <ResultSection
-                title="Artists"
-                icon={<User className="text-secondary h-4 w-4" />}
-                items={results.artists.map((artist) => ({
-                  id: artist.id,
-                  primary: artist.name,
-                  secondary: `${artist.songCount} songs`,
-                  artistSlug: artist.slug,
-                }))}
-                colorClass="bg-secondary/10"
-              />
-            )}
-
-            {!isLoading && !error && !hasResult && searchQuery.length >= 2 && (
-              <div className="text-muted-foreground p-4 text-center text-sm">
-                No results found for &quot;{searchQuery}&quot;
-              </div>
-            )}
-
-            {hasResult && (
-              <div className="border-t p-2">
-                <Button
-                  variant="ghost"
-                  className="text-muted-foreground hover:text-foreground w-full justify-center text-sm"
-                  onClick={() => {
-                    console.log("View all results");
-                    setIsOpen(false);
-                  }}
-                >
-                  View all results
-                </Button>
-              </div>
-            )}
-          </div>
-        </PopoverContent>
+        <SearchTrigger
+          searchQuery={searchQuery}
+          onChange={handleSearchInputChange}
+        />
+        <SearchResultsContent
+          isLoading={isLoading}
+          error={error}
+          results={results}
+          searchQuery={searchQuery}
+          hasResult={hasResult}
+          onViewAllResults={() => {
+            console.log("View all results");
+            setIsOpen(false);
+          }}
+        />
       </Popover>
-    </div>
-  );
-}
-
-interface ResultSectionProps {
-  title: string;
-  icon: React.ReactNode;
-  items: {
-    id: number;
-    primary: string;
-    secondary: string;
-    artistSlug?: string;
-    lyricSlug?: string;
-  }[];
-  colorClass: string;
-}
-
-function ResultSection({ title, icon, items, colorClass }: ResultSectionProps) {
-  return (
-    <div className="flex flex-col gap-2 py-2">
-      <div className="flex items-center px-4 py-1.5">
-        <div className="text-muted-foreground flex items-center gap-2 text-xs font-medium">
-          {icon}
-          <span>{title}</span>
-        </div>
-      </div>
-      <div className="space-y-1 px-1">
-        {items.map((item) => (
-          <Link
-            key={item.id}
-            href={`/lyrics/${item.artistSlug}/${item.lyricSlug}`}
-          >
-            <Button
-              variant="ghost"
-              className="w-full justify-start rounded-sm px-3 py-5 text-left"
-            >
-              <div
-                className={`mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md ${colorClass}`}
-              >
-                {icon}
-              </div>
-              <div className="truncate">
-                <div className="font-medium">{item.primary}</div>
-                <div className="text-muted-foreground text-xs">
-                  {item.secondary}
-                </div>
-              </div>
-            </Button>
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }
