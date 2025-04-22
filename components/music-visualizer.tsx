@@ -14,7 +14,7 @@ export const MusicVisualizer = () => {
     if (isPlaying) {
       const animateBars = async () => {
         await topBarsControl.start({
-          height: [8, 16, 12, 20, 8],
+          scaleY: [1, 2, 1.5, 2.5, 1],
           transition: {
             duration: 1.5,
             repeat: Infinity,
@@ -27,7 +27,7 @@ export const MusicVisualizer = () => {
 
       animateBars();
       bottomBarsControl.start({
-        height: [8, 20, 10, 15, 8],
+        scaleY: [1, 2.5, 1.25, 1.875, 1],
         transition: {
           duration: 1.8,
           repeat: Infinity,
@@ -39,8 +39,8 @@ export const MusicVisualizer = () => {
     } else {
       topBarsControl.stop();
       bottomBarsControl.stop();
-      topBarsControl.start({ height: 8 });
-      bottomBarsControl.start({ height: 8 });
+      topBarsControl.start({ scaleY: 1 });
+      bottomBarsControl.start({ scaleY: 1 });
     }
   }, [isPlaying, topBarsControl, bottomBarsControl]);
 
@@ -78,18 +78,18 @@ export const MusicVisualizer = () => {
               <motion.div
                 className="bg-accent/30 w-3/4 rounded-full"
                 animate={topBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
               />
               <motion.div
                 className="bg-primary/40 w-2/3 rounded-full"
                 animate={topBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
                 transition={{ delay: 0.1 }}
               />
               <motion.div
                 className="bg-secondary/40 w-1/2 rounded-full"
                 animate={topBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
                 transition={{ delay: 0.2 }}
               />
             </div>
@@ -135,18 +135,18 @@ export const MusicVisualizer = () => {
               <motion.div
                 className="bg-secondary/40 w-1/2 rounded-full"
                 animate={bottomBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
               />
               <motion.div
                 className="bg-primary/40 w-2/3 rounded-full"
                 animate={bottomBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
                 transition={{ delay: 0.15 }}
               />
               <motion.div
                 className="bg-accent/30 w-3/4 rounded-full"
                 animate={bottomBarsControl}
-                initial={{ height: 8 }}
+                initial={{ height: 6 }}
                 transition={{ delay: 0.3 }}
               />
             </div>

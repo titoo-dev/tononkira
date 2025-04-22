@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <main className="container mx-auto px-4 py-16">
+    <main className="selection:bg-primary selection:text-primary-foreground container mx-auto px-4 py-16">
       <section className="flex flex-col gap-16 md:flex-row md:items-center">
         <div className="flex-1 space-y-8">
           <div className="space-y-4">
