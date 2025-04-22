@@ -6,7 +6,7 @@ export const SongArtwork = ({
   coverUrl,
   title,
 }: {
-  coverUrl: string | null;
+  coverUrl?: string | null;
   title: string;
 }) => (
   <div className="bg-card relative aspect-square w-full max-w-sm overflow-hidden rounded-xl border shadow-lg">

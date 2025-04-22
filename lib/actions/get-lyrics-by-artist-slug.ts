@@ -1,26 +1,16 @@
 import { prisma } from "../prisma";
 
-export type ArtistWithSongs = {
-  id: number;
-  name: string;
-  slug: string;
-  bio: string | null;
-  url: string | null;
-  imageUrl: string | null;
-  songs: Song[];
-};
-
-export type Song = {
+export type SongByArtistSlug = {
   id: number;
   title: string;
   slug: string;
   views: number | null;
-  trackNumber: number | null;
-  lyric: {
+  createdAt: Date;
+  artists: {
     id: number;
-    language: string;
-    isSynced: boolean;
-  } | null;
+    name: string;
+    slug: string;
+  }[];
 };
 
 /**
@@ -30,48 +20,42 @@ export type Song = {
  */
 export async function getLyricsByArtistSlug(
   artistSlug: string,
-): Promise<ArtistWithSongs | null> {
+): Promise<SongByArtistSlug[] | null> {
   try {
     if (!artistSlug) {
       throw new Error("Artist slug parameter is required");
     }
 
-    const artist = await prisma.artist.findFirst({
+    const songs = await prisma.song.findMany({
+      take: 5,
       where: {
-        slug: artistSlug,
+        artists: {
+          some: {
+            slug: artistSlug,
+          },
+        },
       },
       select: {
         id: true,
-        name: true,
+        title: true,
         slug: true,
-        bio: true,
-        url: true,
-        imageUrl: true,
-        songs: {
+        views: true,
+        createdAt: true,
+        artists: {
           select: {
             id: true,
-            title: true,
             slug: true,
-            views: true,
-            trackNumber: true,
-            lyric: {
-              select: {
-                id: true,
-                language: true,
-                isSynced: true,
-              },
-            },
+            name: true,
           },
-          orderBy: [{ trackNumber: "asc" }, { title: "asc" }],
         },
       },
     });
 
-    if (!artist) {
+    if (!songs) {
       return null;
     }
 
-    return artist;
+    return songs;
   } catch (error) {
     console.error(
       `Failed to fetch lyrics for artist with slug ${artistSlug}:`,
