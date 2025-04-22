@@ -39,12 +39,6 @@ export const SimilarSongsSection = () => (
             Our team is working on an algorithm to find similar songs that match
             your taste and preferences.
           </p>
-          <Button
-            variant="outline"
-            className="border-primary/20 hover:bg-primary/5 mt-6"
-          >
-            Get notified when it&apos;s ready
-          </Button>
         </div>
       </div>
     </div>
