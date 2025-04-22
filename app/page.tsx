@@ -1,5 +1,6 @@
 import { FeaturedLyricsSection } from "@/components/featured-lyrics-section";
 import { FeaturedLyricsSkeleton } from "@/components/featured-lyrics-skeleton";
+import { MusicVisualizer } from "@/components/music-visualizer";
 import { StatsDisplay } from "@/components/stat-display";
 import { StatDisplaySkeleton } from "@/components/stat-display-skeleton";
 import Link from "next/link";
@@ -41,35 +42,7 @@ export default function Home() {
           </Suspense>
         </div>
 
-        <div className="relative flex-1">
-          <div className="relative mx-auto aspect-square max-w-md">
-            <div className="from-primary/20 via-accent/20 to-secondary/20 absolute inset-0 animate-pulse rounded-3xl bg-gradient-to-br blur-xl"></div>
-            <div className="bg-card absolute inset-4 flex items-center justify-center rounded-2xl border p-6 shadow-xl backdrop-blur-md">
-              <div className="relative h-full w-full">
-                <div className="absolute inset-x-0 top-0 flex h-2/5 flex-col items-center justify-center space-y-2">
-                  <div className="bg-accent/30 h-2 w-3/4 rounded-full"></div>
-                  <div className="bg-primary/40 h-2 w-2/3 rounded-full"></div>
-                  <div className="bg-secondary/40 h-2 w-1/2 rounded-full"></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-muted relative flex h-20 w-20 items-center justify-center rounded-full">
-                    <div className="border-t-primary absolute inset-0 animate-spin rounded-full border-4 border-r-transparent border-b-transparent border-l-transparent"></div>
-                    <div className="bg-background flex h-14 w-14 items-center justify-center rounded-full">
-                      <span className="text-2xl">♪</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute inset-x-0 bottom-0 flex h-2/5 flex-col items-center justify-center space-y-2">
-                  <div className="bg-secondary/40 h-2 w-1/2 rounded-full"></div>
-                  <div className="bg-primary/40 h-2 w-2/3 rounded-full"></div>
-                  <div className="bg-accent/30 h-2 w-3/4 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-primary/30 absolute -right-4 bottom-8 h-24 w-24 rounded-full blur-xl"></div>
-          <div className="bg-accent/30 absolute top-8 -left-4 h-24 w-24 rounded-full blur-xl"></div>
-        </div>
+        <MusicVisualizer />
       </section>
 
       {/* featured lyrics */}
