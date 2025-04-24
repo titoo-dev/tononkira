@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/banner.png" alt="Tononkira Web Banner" style="max-width:100%;" />
+</p>
 
-## Getting Started
+<h1 align="center">🎼 Tononkira Web 🎼</h1>
 
-First, run the development server:
+<p align="center">
+  <b>The Ultimate Malagasy Lyrics Platform</b> <br/>
+  <i>Discover, search, and sing along with the best song lyrics in Malagasy, right from your browser!</i>
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌟 About Tononkira Web
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Tononkira Web is an easy-to-use, modern web application that allows you to browse, search, and enjoy a vast collection of Malagasy song lyrics. Whether you are at home, on the go, or anywhere with an internet connection, Tononkira Web brings the joy of Malagasy music to your screen.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+With fast search, a beautiful responsive design, and a growing lyrics database, Tononkira Web is your go-to destination for Malagasy music lovers, karaoke fans, and anyone wishing to explore Malagasy culture through song!
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🔍 **Instant Lyrics Search:** Find lyrics by title, artist, or keywords in seconds.
+- 📚 **Rich Lyrics Database:** Access a large and continually updated collection of Malagasy songs.
+- ❤️ **Favorites:** Bookmark your favorite lyrics for quick access.
+- 🖥️ **Responsive Design:** Enjoy the best experience on desktop, tablet, or mobile.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Technologies Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **TypeScript**: Ensures robust, maintainable, and scalable code.
+- **CSS**: For beautiful, responsive, and modern UI styling.
+- **JavaScript**: For interactive client-side functionality.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/screenshot1.png" alt="Tononkira Web Screenshot 1" width="300"/>
+  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/screenshot2.png" alt="Tononkira Web Screenshot 2" width="300"/>
+</p>
+
+---
+
+## 🚦 Getting Started
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/titoo-dev/tononkira.git
+   ```
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+3. **Run the app locally**
+   ```bash
+   pnpm start
+   ```
+4. **Open your browser**
+   Visit [http://localhost:3000](http://localhost:3000) to explore Tononkira Web!
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! If you have suggestions, bug reports, or new feature ideas, please open an issue or submit a pull request. Let’s make Malagasy music accessible to everyone across the globe!
+
+---
+
+## 📬 Contact & Support
+
+Questions, feedback, or interested in collaborating? Contact [titoo-dev](mailto:titoo.dev@gmail.com).
+
+---
+
+<p align="center">
+  <b>Tononkira Web</b> — Bringing Malagasy lyrics to the world, one song at a time!
+</p>
