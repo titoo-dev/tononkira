@@ -14,10 +14,10 @@ export interface ContentBlock {
 
 interface LyricsSection {
   type: "couplet" | "refrain" | "pont" | "introduction";
-  numero?: number;
-  vers: string[];
+  verseNumber?: number;
+  content: string[];
 }
 
 export interface LyricsAnalysis {
-  paroles: LyricsSection[];
+  content: LyricsSection[];
 }

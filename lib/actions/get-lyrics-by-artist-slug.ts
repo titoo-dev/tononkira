@@ -27,7 +27,7 @@ export async function getLyricsByArtistSlug(
     }
 
     const songs = await prisma.song.findMany({
-      take: 5,
+      take: 10,
       where: {
         artists: {
           some: {

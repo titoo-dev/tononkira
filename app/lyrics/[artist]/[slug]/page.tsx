@@ -26,8 +26,8 @@ export default async function LyricsPage(props: {
 
   try {
     songData = await getLyricsBySlug(artist, slug);
+    console.log("songData", songData);
     songByArtistData = await getLyricsByArtistSlug(artist);
-    console.log("artistData", songByArtistData);
     if (!songData || !songByArtistData) {
       notFound();
     }
@@ -35,9 +35,6 @@ export default async function LyricsPage(props: {
     console.error("Error fetching lyrics:", error);
     throw new Error(`Failed to fetch lyrics for ${slug}`);
   }
-
-  // Transform lyrics content from string to array of lines
-  const lyricsData = JSON.parse(songData.lyric!.content);
 
   return (
     <main className="container mx-auto px-6 py-12">
@@ -62,7 +59,7 @@ export default async function LyricsPage(props: {
         </div>
 
         {/* Right column with lyrics */}
-        <LyricsSection lyrics={lyricsData} />
+        <LyricsSection lyric={songData.lyric!} />
       </div>
 
       <SimilarSongsSection />
