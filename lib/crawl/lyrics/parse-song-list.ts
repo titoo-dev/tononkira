@@ -2,6 +2,7 @@ import * as cheerio from "cheerio";
 import { SongData } from "../types";
 import { BASE_URL } from "../main";
 import { fetchLyricsContentPage } from "./fetch-lyrics-content-page";
+import { processLyricsRawText } from "./process-lyrics-raw-text";
 import { processLyricsBlocks } from "./process-lyrics-blocks";
 
 /**
@@ -46,8 +47,10 @@ export const parseSongList = async (
     );
     try {
       const content = await fetchLyricsContentPage(link.song.url);
-      const parsedContent = processLyricsBlocks(content);
-      link.song.lyrics = JSON.stringify(parsedContent);
+      const rawText = processLyricsRawText(content);
+      const blocks = processLyricsBlocks(content);
+      link.song.lyrics = JSON.stringify(blocks);
+      link.song.lyricsText = rawText;
     } catch (error) {
       console.error(
         `❌ Error processing lyrics for "${link.song.title}":`,

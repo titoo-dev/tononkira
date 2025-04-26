@@ -1,6 +1,6 @@
 export interface SongData {
   artist: { name: string; url: string };
-  song: { title: string; url: string; lyrics?: string };
+  song: { title: string; url: string; lyrics?: string; lyricsText?: string };
 }
 
 export interface LyricsData {
