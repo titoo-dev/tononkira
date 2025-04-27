@@ -1,8 +1,6 @@
 <p align="center">
-  ![brand](https://github.com/user-attachments/assets/e1c54252-1df9-4ea2-b3c9-72c7833b84c9)
+  <img src="https://github.com/user-attachments/assets/e1c54252-1df9-4ea2-b3c9-72c7833b84c9" alt="Tononkira Web Banner" style="max-width:100%;" />
 </p>
-
-<h1 align="center">🎼 Tononkira Web 🎼</h1>
 
 <p align="center">
   <b>The Ultimate Malagasy Lyrics Platform</b> <br/>
@@ -39,8 +37,8 @@ With fast search, a beautiful responsive design, and a growing lyrics database, 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/screenshot1.png" alt="Tononkira Web Screenshot 1" width="300"/>
-  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/screenshot2.png" alt="Tononkira Web Screenshot 2" width="300"/>
+  <img src="https://github.com/user-attachments/assets/b3222228-dfe1-4eef-b718-0a3f66389de3" alt="Tononkira Web Screenshot 1" width="500"/>
+  <img src="https://github.com/user-attachments/assets/1510b952-c02f-4fd2-85b7-7f2a43dd417e" alt="Tononkira Web Screenshot 2" width="500"/>
 </p>
 
 ---
