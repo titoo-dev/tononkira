@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/titoo-dev/tononkira/main/assets/banner.png" alt="Tononkira Web Banner" style="max-width:100%;" />
+  ![brand](https://github.com/user-attachments/assets/e1c54252-1df9-4ea2-b3c9-72c7833b84c9)
 </p>
 
 <h1 align="center">🎼 Tononkira Web 🎼</h1>
