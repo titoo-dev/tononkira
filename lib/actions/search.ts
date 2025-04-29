@@ -28,15 +28,36 @@ export async function search(query: string) {
       },
       take: 10,
     }),
-    prisma.artist.findMany({
-      where: { name: { contains: query, mode: "insensitive" } },
-      include: {
-        _count: {
-          select: { songs: true },
+    prisma.artist
+      .findMany({
+        where: { name: { contains: query, mode: "insensitive" } },
+        include: {
+          _count: {
+            select: { songs: true },
+          },
         },
-      },
-      take: 10,
-    }),
+        orderBy: {
+          slug: "asc",
+        },
+        take: 10,
+      })
+      .then((artistResults) => {
+        // Group artists by slug to remove duplicates
+        const artistMap = new Map();
+
+        artistResults.forEach((artist) => {
+          // If we haven't seen this slug yet or this artist has more songs,
+          // use this artist as the representative
+          if (
+            !artistMap.has(artist.slug) ||
+            artistMap.get(artist.slug)._count.songs < artist._count.songs
+          ) {
+            artistMap.set(artist.slug, artist);
+          }
+        });
+
+        return Array.from(artistMap.values());
+      }),
     prisma.lyric.findMany({
       where: {
         OR: [
