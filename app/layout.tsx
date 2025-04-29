@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import React from "react";
+import React, { Suspense } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
@@ -43,7 +43,9 @@ export default async function RootLayout({
 
           <HeaderSection />
 
-          <SearchResultSection />
+          <Suspense>
+            <SearchResultSection />
+          </Suspense>
 
           <div className="bg-background text-foreground">{children}</div>
 

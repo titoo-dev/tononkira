@@ -2,6 +2,7 @@ import { Header } from "@/components/header";
 import { Pagination } from "@/components/pagination";
 import { TabNav } from "@/components/tab-nav";
 import { getPaginatedLyrics } from "@/lib/actions/get-paginated-lyrics";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 // Main page component
@@ -27,7 +28,9 @@ export default async function LyricsPage(props: {
       </div>
 
       <div className="mt-8">
-        <Pagination totalPages={totalPages} />
+        <Suspense>
+          <Pagination totalPages={totalPages} />
+        </Suspense>
       </div>
     </main>
   );
