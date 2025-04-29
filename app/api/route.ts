@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { instantSearch } from "@/lib/actions/search";
+import { search } from "@/lib/actions/search";
 
 /**
  * GET route handler for search functionality
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     // Perform search
-    const results = await instantSearch(query);
+    const results = await search(query);
 
     // Return successful response
     return NextResponse.json(results);
