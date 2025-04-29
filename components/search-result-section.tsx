@@ -167,7 +167,7 @@ export function SearchResultSection({
   }
 
   return (
-    <Card className="w-full overflow-hidden shadow-none">
+    <Card className="selection:bg-primary selection:text-primary-foreground container mx-auto mt-4 w-full overflow-hidden px-4 pt-8 pb-16 shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between text-xl">
           <span className="from-primary to-primary/70 bg-gradient-to-r bg-clip-text text-transparent">

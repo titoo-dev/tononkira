@@ -3,7 +3,6 @@ import Image from "next/image";
 import GlobalSearch from "./search";
 import { auth } from "@clerk/nextjs/server";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
 
 export async function HeaderSection() {
   const { userId } = await auth();
@@ -41,15 +40,6 @@ export async function HeaderSection() {
                 <Link href="/sign-in">Sign In</Link>
               </Button>
             )}
-
-            <Button
-              size="icon"
-              variant="outline"
-              className="border-primary/30 hover:bg-primary/10 rounded-full md:hidden"
-            >
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Menu</span>
-            </Button>
           </div>
         </div>
       </div>
