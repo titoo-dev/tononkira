@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import GlobalSearch from "./search";
 import { auth } from "@clerk/nextjs/server";
 import { Button } from "./ui/button";
+import { SearchBar } from "./search";
 
 export async function HeaderSection() {
   const { userId } = await auth();
@@ -30,7 +30,7 @@ export async function HeaderSection() {
 
           {/* Search and Actions */}
           <div className="flex items-center gap-3">
-            <GlobalSearch />
+            <SearchBar />
 
             {!isSignedIn && (
               <Button

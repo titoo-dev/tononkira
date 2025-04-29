@@ -1,49 +1,12 @@
 "use client";
 
-import * as React from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { SearchTrigger } from "./search/search-trigger";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-/**
- * Type definitions for search results
- */
-interface Song {
-  id: number;
-  title: string;
-  artist: string;
-  slug: string;
-  artists: Artist[];
-}
+import { Input } from "./ui/input";
+import { SearchIcon } from "lucide-react";
+import { Suspense } from "react";
 
-interface Artist {
-  id: number;
-  name: string;
-  songCount: number;
-  slug: string;
-}
-
-interface Lyric {
-  id: number;
-  content: string;
-  songTitle: string;
-  artist: string;
-}
-
-export interface SearchResults {
-  songs: Song[];
-  artists: Artist[];
-  lyrics: Lyric[];
-}
-
-/**
- * Instant Search component for searching lyrics with popover results
- *
- * Displays results grouped by song title, artist, and lyrics content
- * Fetches data from the API endpoint
- * Styled according to shadcn UI design
- * Responsive - hidden on mobile, visible on medium screens and up
- */
-export function GlobalSearch() {
+function Search() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -59,16 +22,45 @@ export function GlobalSearch() {
       params.delete("q");
     }
     replace(`${pathname}?${params.toString()}`);
-  }, 150);
+  }, 240);
 
   return (
-    <SearchTrigger
-      searchQuery={searchParams.get("q") || ""}
-      onChange={(e) => {
-        handleSearch(e.target.value);
-      }}
-    />
+    <div className="relative">
+      <SearchIcon
+        aria-hidden="true"
+        className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2"
+      />
+      <Input
+        type="search"
+        defaultValue={searchParams.get("q") || ""}
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+        placeholder="Search lyrics..."
+        className="bg-muted/50 w-[100px] rounded-full pl-10"
+        aria-label="Search lyrics"
+      />
+    </div>
   );
 }
 
-export default GlobalSearch;
+export function SearchBar() {
+  return (
+    <Suspense fallback={<SearchSkeleton />}>
+      <Search />
+    </Suspense>
+  );
+}
+
+/**
+ * Skeleton loader for search component
+ * Displays a placeholder while the search component is loading
+ */
+function SearchSkeleton() {
+  return (
+    <div className="relative animate-pulse">
+      <div className="bg-muted-foreground/30 absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 rounded-full" />
+      <div className="bg-muted/50 h-10 w-[120px] rounded-full pl-10" />
+    </div>
+  );
+}

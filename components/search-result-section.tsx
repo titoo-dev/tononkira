@@ -289,5 +289,3 @@ export function SearchResultSection({
     </Card>
   );
 }
-
-export default SearchResultSection;
