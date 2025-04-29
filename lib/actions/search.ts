@@ -26,7 +26,7 @@ export async function search(query: string) {
         slug: true,
         artists: { select: { id: true, name: true, slug: true } },
       },
-      take: 5,
+      take: 10,
     }),
     prisma.artist.findMany({
       where: { name: { contains: query, mode: "insensitive" } },
@@ -35,7 +35,7 @@ export async function search(query: string) {
           select: { songs: true },
         },
       },
-      take: 5,
+      take: 10,
     }),
     prisma.lyric.findMany({
       where: {
@@ -47,6 +47,7 @@ export async function search(query: string) {
       select: {
         id: true,
         content: true,
+        contentText: true,
         song: {
           select: {
             title: true,
@@ -54,9 +55,34 @@ export async function search(query: string) {
           },
         },
       },
-      take: 5,
+      take: 10,
     }),
   ]);
+
+  // Helper function to extract content surrounding the match
+  const extractMatchContext = (content: string, searchTerm: string): string => {
+    const contentLower = content.toLowerCase();
+    const queryLower = searchTerm.toLowerCase();
+    const matchIndex = contentLower.indexOf(queryLower);
+
+    if (matchIndex >= 0) {
+      // Get context around the match (30 characters before and after)
+      const startPos = Math.max(0, matchIndex - 30);
+      const endPos = Math.min(
+        content.length,
+        matchIndex + searchTerm.length + 30,
+      );
+
+      return (
+        (startPos > 0 ? "..." : "") +
+        content.substring(startPos, endPos) +
+        (endPos < content.length ? "..." : "")
+      );
+    }
+
+    // If no exact match found, return first 100 characters
+    return content.substring(0, 100) + (content.length > 100 ? "..." : "");
+  };
 
   // Transform the results to match the expected interface in SearchResultSection
   return {
@@ -79,9 +105,8 @@ export async function search(query: string) {
       // Join artist names with commas to display them together
       artist:
         lyric.song?.artists.map((a) => a.name).join(", ") || "Unknown Artist",
-      content:
-        lyric.content.substring(0, 100) +
-        (lyric.content.length > 100 ? "..." : ""),
+      content: extractMatchContext(lyric.content, query),
+      contentText: extractMatchContext(lyric.contentText!, query),
     })),
   };
 }

@@ -28,6 +28,7 @@ interface Lyric {
   songTitle: string;
   artist: string;
   content: string;
+  contentText: string;
 }
 
 export interface SearchResults {
@@ -138,7 +139,7 @@ async function SearchResultSectionContent({
 
             <ScrollArea className="pb-4">
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {songs.slice(0, 4).map((song) => (
+                {songs.slice(0, 10).map((song) => (
                   <Link
                     key={song.id}
                     href={`/songs/${song.slug}`}
@@ -210,9 +211,9 @@ async function SearchResultSectionContent({
             </div>
 
             <div className="space-y-3">
-              {lyrics.slice(0, 3).map((lyric) => {
+              {lyrics.slice(0, 10).map((lyric) => {
                 // Find and extract context around the matching lyrics
-                const lyricContent = lyric.content;
+                const lyricContent = lyric.contentText || lyric.content;
                 const queryLower = searchQuery.toLowerCase();
                 const contentLower = lyricContent.toLowerCase();
                 const matchIndex = contentLower.indexOf(queryLower);
