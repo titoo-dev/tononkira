@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Popover } from "@/components/ui/popover";
-import { useState, useEffect, useRef } from "react";
-import { useDebounce } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 import { SearchTrigger } from "./search/search-trigger";
-import { SearchResultsContent } from "./search/result";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 /**
  * Type definitions for search results
  */
@@ -46,99 +44,30 @@ export interface SearchResults {
  * Responsive - hidden on mobile, visible on medium screens and up
  */
 export function GlobalSearch() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [debouncedQuery] = useDebounce(searchQuery, 240);
-  const [results, setResults] = useState<SearchResults>({
-    songs: [],
-    artists: [],
-    lyrics: [],
-  });
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-  const popoverRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    async function fetchSearchResults() {
-      if (debouncedQuery.length < 2) {
-        setResults({ songs: [], artists: [], lyrics: [] });
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(
-          `/api?q=${encodeURIComponent(debouncedQuery)}`,
-        );
-
-        if (!response.ok) {
-          throw new Error(`Search failed with status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setResults(data);
-      } catch (err) {
-        console.error("Search error:", err);
-        setError("Failed to fetch search results");
-        setResults({ songs: [], artists: [], lyrics: [] });
-      } finally {
-        setIsLoading(false);
-      }
+  const handleSearch = useDebouncedCallback(function handleSearch(
+    term: string,
+  ) {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
+    if (term) {
+      params.set("q", term);
+    } else {
+      params.delete("q");
     }
-
-    fetchSearchResults();
-  }, [debouncedQuery]);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setSearchQuery("");
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const hasResult =
-    results.songs.length > 0 ||
-    results.artists.length > 0 ||
-    results.lyrics.length > 0;
-
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    setIsOpen(true);
-  };
+    replace(`${pathname}?${params.toString()}`);
+  }, 150);
 
   return (
-    <div className="relative hidden md:block" ref={popoverRef}>
-      <Popover open={isOpen || hasResult}>
-        <SearchTrigger
-          searchQuery={searchQuery}
-          onChange={handleSearchInputChange}
-        />
-        <SearchResultsContent
-          isLoading={isLoading}
-          error={error}
-          results={results}
-          searchQuery={searchQuery}
-          hasResult={hasResult}
-          onViewAllResults={() => {
-            console.log("View all results");
-            setIsOpen(false);
-          }}
-        />
-      </Popover>
-    </div>
+    <SearchTrigger
+      searchQuery={searchParams.get("q") || ""}
+      onChange={(e) => {
+        handleSearch(e.target.value);
+      }}
+    />
   );
 }
 
