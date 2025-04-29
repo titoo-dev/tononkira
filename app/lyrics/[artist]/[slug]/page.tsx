@@ -13,12 +13,23 @@ import {
   SongByArtistSlug,
   getLyricsByArtistSlug,
 } from "@/lib/actions/get-lyrics-by-artist-slug";
+import { Suspense } from "react";
+import {
+  SearchResultSection,
+  SearchResultSkeleton,
+} from "@/components/search-result-section";
 
 export default async function LyricsPage(props: {
-  params: Promise<{ artist: string; slug: string }>;
+  params: Promise<{ artist: string; slug: string; q?: string }>;
+  searchParams?: Promise<{
+    q?: string;
+    page?: string;
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const params = await props.params;
 
+  const query = searchParams?.q || "";
   const { artist, slug } = params;
 
   let songData: SongWithLyricsDetail | null;
@@ -37,32 +48,37 @@ export default async function LyricsPage(props: {
   }
 
   return (
-    <main className="container mx-auto px-6 py-12">
-      <BackNavigation />
+    <>
+      <Suspense fallback={<SearchResultSkeleton />}>
+        <SearchResultSection searchQuery={query} />
+      </Suspense>
+      <main className="container mx-auto px-6 py-12">
+        <BackNavigation />
 
-      <div className="grid gap-10 md:grid-cols-3">
-        {/* Left column with song details */}
-        <div className="space-y-8 md:col-span-1">
-          <SongArtwork title={songData.title} />
-          <SongInfo
-            title={songData.title}
-            artists={songData.artists}
-            views={songData.views}
-          />
-          {songData.artists.length > 0 && (
-            <RelatedSongs
-              artist={songData.artists[0].name}
-              data={songByArtistData}
-              artistSlug={songData.artists[0].slug}
+        <div className="grid gap-10 md:grid-cols-3">
+          {/* Left column with song details */}
+          <div className="space-y-8 md:col-span-1">
+            <SongArtwork title={songData.title} />
+            <SongInfo
+              title={songData.title}
+              artists={songData.artists}
+              views={songData.views}
             />
-          )}
+            {songData.artists.length > 0 && (
+              <RelatedSongs
+                artist={songData.artists[0].name}
+                data={songByArtistData}
+                artistSlug={songData.artists[0].slug}
+              />
+            )}
+          </div>
+
+          {/* Right column with lyrics */}
+          <LyricsSection lyric={songData.lyric!} />
         </div>
 
-        {/* Right column with lyrics */}
-        <LyricsSection lyric={songData.lyric!} />
-      </div>
-
-      <SimilarSongsSection />
-    </main>
+        <SimilarSongsSection />
+      </main>
+    </>
   );
 }

@@ -17,8 +17,6 @@ export default async function Home(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.q || "";
 
-  console.log("q", query);
-
   return (
     <main className="selection:bg-primary selection:text-primary-foreground container mx-auto px-4 pt-8 pb-16">
       <Suspense fallback={<SearchResultSkeleton />}>

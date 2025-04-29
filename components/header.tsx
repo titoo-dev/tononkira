@@ -5,7 +5,7 @@ interface HeaderProps {
 
 export function Header({ title, description }: HeaderProps) {
   return (
-    <div className="mb-10 space-y-3">
+    <div className="mt-6 mb-10 space-y-3">
       <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
       <p className="text-muted-foreground max-w-2xl text-lg">{description}</p>
     </div>
