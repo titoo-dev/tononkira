@@ -46,7 +46,7 @@ export const MusicVisualizer = () => {
 
   return (
     <motion.div
-      className="relative flex-1"
+      className="relative hidden flex-1 lg:block" // Hide on mobile, display from medium screens up
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}

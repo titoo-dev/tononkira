@@ -6,9 +6,9 @@ import { MusicVisualizer } from "./music-visualizer";
 
 export const HeroSection = () => {
   return (
-    <section className="flex flex-col gap-16 md:flex-row md:items-center">
+    <section className="flex flex-col gap-16 pt-4 md:flex-row md:items-center">
       <div className="flex-1 space-y-8">
-        <div className="space-y-4">
+        <div className="space-y-4 pt-8 lg:pt-0">
           <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-5xl leading-tight font-bold tracking-tight text-transparent lg:text-6xl lg:leading-[1.2] xl:leading-[1.3]">
             <span>Tononkira</span> <span className="font-medium">malagasy</span>
           </h1>
