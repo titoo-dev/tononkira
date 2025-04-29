@@ -37,7 +37,7 @@ function Search() {
           handleSearch(e.target.value);
         }}
         placeholder="Search lyrics..."
-        className="bg-muted/50 w-[100px] rounded-full pl-10"
+        className="bg-muted/50 w-[220px] rounded-full pl-10"
         aria-label="Search lyrics"
       />
     </div>
@@ -60,7 +60,7 @@ function SearchSkeleton() {
   return (
     <div className="relative animate-pulse">
       <div className="bg-muted-foreground/30 absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 rounded-full" />
-      <div className="bg-muted/50 h-10 w-[120px] rounded-full pl-10" />
+      <div className="bg-muted/50 h-10 w-[220px] rounded-full pl-10" />
     </div>
   );
 }
