@@ -19,7 +19,7 @@ export const KaraokeMode = ({
   containerRef,
 }: KaraokeModeProps) => {
   return (
-    <div className="from-primary/5 to-secondary/5 relative flex min-h-[30vh] flex-col rounded-lg bg-gradient-to-br p-3 md:min-h-[40vh] md:p-4">
+    <div className="from-primary/5 to-secondary/5 relative flex min-h-[30vh] flex-1 flex-col rounded-lg bg-gradient-to-br p-3 md:min-h-[40vh] md:p-4">
       <div
         ref={containerRef}
         className="scrollbar-hide flex-1 overflow-x-hidden overflow-y-auto"

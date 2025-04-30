@@ -122,7 +122,7 @@ export const LyricsSection = ({ lyric }: LyricsSectionProps) => {
   };
 
   return (
-    <div className="bg-card/50 overflow-hidden rounded-xl border p-4 shadow-sm backdrop-blur-sm md:col-span-2 md:p-6">
+    <div className="bg-card/50 flex flex-col overflow-hidden rounded-xl border p-4 shadow-sm backdrop-blur-sm md:col-span-2 md:p-6">
       <LyricsHeader
         lyricId={lyric.id}
         isKaraokeMode={isKaraokeMode}
