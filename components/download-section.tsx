@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Music, Search, StarIcon, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
+import Image from "next/image";
 
 export const DownloadSection = () => {
   return (
@@ -147,58 +148,17 @@ const MockupsSection = () => {
             </div>
           </div>
 
-          {/* App content */}
-          <div className="bg-background/95 h-full pt-6">
-            {/* App header */}
-            <div className="from-primary to-secondary bg-gradient-to-r p-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-primary-foreground font-bold">Tononkira</h3>
-                <Search className="text-primary-foreground h-4 w-4" />
-              </div>
-            </div>
-
-            {/* App content */}
-            <div className="space-y-4 p-4">
-              <div className="bg-muted relative flex h-40 items-center justify-center overflow-hidden rounded-lg">
-                <div className="from-primary/30 to-secondary/30 absolute inset-0 bg-gradient-to-br"></div>
-                <Music className="text-primary-foreground h-10 w-10" />
-              </div>
-              <div className="space-y-2">
-                <div className="bg-muted h-6 w-3/4 rounded"></div>
-                <div className="bg-muted h-4 w-1/2 rounded"></div>
-              </div>
-              <div className="flex gap-2">
-                <div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
-                  <Music className="text-primary h-4 w-4" />
-                </div>
-                <div className="flex-1 space-y-2">
-                  <div className="bg-muted h-3 rounded"></div>
-                  <div className="bg-muted h-3 w-3/4 rounded"></div>
-                </div>
-              </div>
-              <div className="bg-border h-px"></div>
-              <div className="space-y-2">
-                <div className="bg-muted h-4 rounded"></div>
-                <div className="bg-muted h-4 rounded"></div>
-                <div className="bg-muted h-4 w-3/4 rounded"></div>
-              </div>
-            </div>
-
-            {/* App navigation */}
-            <div className="border-border bg-background/80 absolute inset-x-0 bottom-0 flex h-14 items-center justify-around border-t backdrop-blur-sm">
-              <div className="flex flex-col items-center">
-                <Music className="text-primary h-4 w-4" />
-                <span className="text-[10px]">Songs</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Search className="h-4 w-4" />
-                <span className="text-[10px]">Search</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <StarIcon className="h-4 w-4" />
-                <span className="text-[10px]">Favorites</span>
-              </div>
-            </div>
+          {/* App content - First onboarding screen */}
+          <div className="h-full w-full overflow-hidden">
+            {/* Using the offline access onboarding screen */}
+            <Image
+              src="/flutter_03.png"
+              alt="Tononkira Offline Access"
+              className="h-full w-full object-cover"
+              aria-label="Mobile app screen showing offline access feature with a checkmark icon"
+              width={280}
+              height={570}
+            />
           </div>
 
           {/* Notch */}
@@ -212,91 +172,40 @@ const MockupsSection = () => {
       {/* Left phone (slightly turned) */}
       <div className="absolute top-[15%] left-[5%] z-10 origin-center scale-[0.65] rotate-[-15deg]">
         <div className="border-foreground/10 bg-background relative h-[570px] w-[280px] overflow-hidden rounded-[40px] border-[8px] shadow-xl">
-          {/* App content - dark theme */}
-          <div className="h-full bg-slate-900">
-            {/* App header */}
-            <div className="bg-gradient-to-r from-blue-600 to-violet-600 p-6">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-white">Tononkira Dark</h3>
-                <Search className="h-4 w-4 text-white" />
-              </div>
-            </div>
-
-            {/* App content */}
-            <div className="space-y-4 p-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="h-24 rounded-lg bg-slate-800"></div>
-                <div className="h-24 rounded-lg bg-slate-800"></div>
-                <div className="h-24 rounded-lg bg-slate-800"></div>
-                <div className="h-24 rounded-lg bg-slate-800"></div>
-              </div>
-
-              <div className="h-px bg-slate-700"></div>
-
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-blue-500/20"></div>
-                  <div className="flex-1">
-                    <div className="h-3 w-3/4 rounded bg-slate-700"></div>
-                    <div className="mt-1 h-2 w-1/2 rounded bg-slate-700"></div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-violet-500/20"></div>
-                  <div className="flex-1">
-                    <div className="h-3 w-3/4 rounded bg-slate-700"></div>
-                    <div className="mt-1 h-2 w-1/2 rounded bg-slate-700"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* App content - Save favorites onboarding screen */}
+          <div className="h-full w-full overflow-hidden">
+            <Image
+              src="/flutter_05.png"
+              alt="Tononkira Save Favorites"
+              className="h-full w-full object-cover"
+              aria-label="Mobile app screen showing save favorites feature with a heart icon"
+              width={280}
+              height={570}
+            />
           </div>
+
+          {/* Screen reflections */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5"></div>
         </div>
       </div>
 
-      {/* Right tablet device */}
+      {/* Right device (third onboarding screen) */}
       <div className="absolute top-[25%] right-[5%] z-20 origin-center scale-[0.7] rotate-[15deg]">
-        <div className="border-foreground/10 bg-background relative h-[280px] w-[380px] overflow-hidden rounded-[30px] border-[10px] shadow-xl">
-          {/* App content - tablet landscape view */}
-          <div className="from-background to-background/95 flex h-full bg-gradient-to-br p-2">
-            {/* Sidebar */}
-            <div className="border-border h-full w-[30%] border-r p-3">
-              <div className="bg-primary/20 mb-6 h-6 w-[80%] rounded-full"></div>
-              <div className="space-y-3">
-                <div className="bg-muted h-4 rounded"></div>
-                <div className="bg-muted h-4 rounded"></div>
-                <div className="bg-primary/20 h-4 rounded"></div>
-                <div className="bg-muted h-4 rounded"></div>
-                <div className="bg-muted h-4 rounded"></div>
-              </div>
-            </div>
-
-            {/* Main content */}
-            <div className="flex-1 p-3">
-              <div className="grid h-full grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <div className="bg-secondary/10 h-[90px] rounded-lg"></div>
-                  <div className="bg-muted h-3 w-3/4 rounded"></div>
-                  <div className="bg-muted h-2 w-1/2 rounded"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="bg-primary/10 h-[90px] rounded-lg"></div>
-                  <div className="bg-muted h-3 w-3/4 rounded"></div>
-                  <div className="bg-muted h-2 w-1/2 rounded"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="bg-accent/10 h-[90px] rounded-lg"></div>
-                  <div className="bg-muted h-3 w-3/4 rounded"></div>
-                  <div className="bg-muted h-2 w-1/2 rounded"></div>
-                </div>
-                <div className="space-y-2">
-                  <div className="h-[90px] rounded-lg bg-slate-500/10"></div>
-                  <div className="bg-muted h-3 w-3/4 rounded"></div>
-                  <div className="bg-muted h-2 w-1/2 rounded"></div>
-                </div>
-              </div>
-            </div>
+        <div className="border-foreground/10 bg-background relative h-[570px] w-[280px] overflow-hidden rounded-[40px] border-[8px] shadow-xl">
+          {/* App content - Find lyrics easily onboarding screen */}
+          <div className="h-full w-full overflow-hidden">
+            <Image
+              src="/flutter_06.png"
+              alt="Tononkira Find Lyrics"
+              className="h-full w-full object-cover"
+              aria-label="Mobile app screen showing search functionality with a magnifying glass icon"
+              width={280}
+              height={570}
+            />
           </div>
+
+          {/* Screen reflections */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/5"></div>
         </div>
       </div>
 
