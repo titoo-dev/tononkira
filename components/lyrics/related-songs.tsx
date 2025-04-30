@@ -22,7 +22,11 @@ export const RelatedSongs = ({ data, artist, artistSlug }: Props) => {
       </h3>
       <div className="space-y-2">
         {displayedSongs.map((song) => (
-          <RelatedSongItem key={song.id} title={song.title} />
+          <RelatedSongItem
+            key={song.id}
+            title={song.title}
+            href={`/lyrics/${song.artists[0].slug}/${song.slug}`}
+          />
         ))}
       </div>
       {hasMoreSongs && (
