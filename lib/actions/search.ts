@@ -113,6 +113,7 @@ export async function search(query: string) {
       // Join artist names with commas to display them together
       artist: song.artists.map((a) => a.name).join(", ") || "Unknown Artist",
       slug: song.slug,
+      artistSlug: song.artists[0]?.slug || "unknown-artist",
     })),
     artists: artists.map((artist) => ({
       id: String(artist.id),

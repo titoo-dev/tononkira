@@ -142,7 +142,7 @@ async function SearchResultSectionContent({
                 {songs.slice(0, 10).map((song) => (
                   <Link
                     key={song.id}
-                    href={`/songs/${song.slug}`}
+                    href={`/lyrics/${song.artistSlug}/${song.slug}`}
                     className="bg-muted/40 hover:bg-accent hover:border-primary/20 flex items-center rounded-lg border border-transparent p-3 transition-colors duration-200"
                   >
                     <div className="bg-background text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
