@@ -1,4 +1,4 @@
-import { DownloadSection } from "@/components/download_section";
+import { DownloadSection } from "@/components/download-section";
 import { FeaturedLyricsSection } from "@/components/featured-lyrics-section";
 import { FeaturedLyricsSkeleton } from "@/components/featured-lyrics-skeleton";
 import { HeroSection } from "@/components/hero-section";

@@ -80,17 +80,6 @@ export async function getLyricsBySlug(
       },
     });
 
-    // Increment view count if the song exists
-    if (song) {
-      await prisma.song.update({
-        where: { id: song.id },
-        data: { views: { increment: 1 } },
-      });
-
-      // Return the updated view count
-      song.views = (song.views || 0) + 1;
-    }
-
     return song;
   } catch (error) {
     console.error(
