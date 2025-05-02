@@ -1,7 +1,5 @@
 import { prisma } from "../prisma";
 
-// filepath: c:\Users\titos\dev\tononkira\lib\actions\get-lyrics-count.ts
-
 /**
  * Counts the total number of lyrics in the database
  * @returns Promise containing the total count of lyrics

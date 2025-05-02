@@ -1,7 +1,5 @@
 import { prisma } from "../prisma";
 
-// filepath: C:/Users/titos/dev/tononkira/lib/actions/get-lyrics-by-slug.ts
-
 export type SongWithLyricsDetail = {
   id: number;
   title: string;
