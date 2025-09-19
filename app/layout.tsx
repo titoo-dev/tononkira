@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import { HeaderSection } from "@/components/header-section";
@@ -30,24 +29,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${inter.variable} ${playfair.variable} antialiased`}>
-          <NextTopLoader
-            showSpinner={false}
-            shadow={false}
-            color="var(--primary)"
-          />
+    <html lang="en">
+      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+        <NextTopLoader
+          showSpinner={false}
+          shadow={false}
+          color="var(--primary)"
+        />
 
-          <HeaderSection />
+        <HeaderSection />
 
-          <div className="bg-background text-foreground">{children}</div>
+        <div className="bg-background text-foreground">{children}</div>
 
-          <FooterSection />
+        <FooterSection />
 
-          <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+        <Toaster />
+      </body>
+    </html>
   );
 }
