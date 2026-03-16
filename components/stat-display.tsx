@@ -4,12 +4,14 @@ import { getLyricsCount } from "../lib/actions/get-lyrics-count";
 import { connection } from "next/server";
 
 interface StatItemProps {
+  value: string;
   label: string;
 }
 
-const StatItem = ({ label }: StatItemProps) => (
-  <div className="bg-muted flex items-center justify-center rounded-lg p-3">
-    <span className="text-sm font-medium">{label}</span>
+const StatItem = ({ value, label }: StatItemProps) => (
+  <div className="bg-muted/60 flex flex-col items-center justify-center rounded-xl p-3 gap-0.5">
+    <span className="text-foreground text-lg font-bold leading-tight">{value}</span>
+    <span className="text-muted-foreground text-xs">{label}</span>
   </div>
 );
 
@@ -22,17 +24,15 @@ export async function StatsDisplay() {
   ]);
 
   const stats = [
-    {
-      label: `${formatNumber(artistsCount)} Artists`,
-    },
-    { label: `${formatNumber(lyricsCount)} Songs` },
-    { label: "Easy Search" },
+    { value: formatNumber(artistsCount), label: "Artists" },
+    { value: formatNumber(lyricsCount), label: "Songs" },
+    { value: "Fast", label: "Search" },
   ];
 
   return (
     <div className="grid grid-cols-3 gap-2 pt-8">
       {stats.map((stat, index) => (
-        <StatItem label={stat.label} key={index} />
+        <StatItem value={stat.value} label={stat.label} key={index} />
       ))}
     </div>
   );

@@ -1,9 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import React from "react";
+import { connection } from "next/server";
 
-export const FooterSection = () => {
+export async function FooterSection() {
+  await connection();
   return (
     <footer className="border-border/40 bg-background/80 border-t backdrop-blur-sm">
       <div className="container mx-auto py-8">
@@ -50,11 +49,11 @@ export const FooterSection = () => {
 
         {/* Copyright */}
         <div className="border-border/40 mt-8 border-t pt-6 text-center">
-          <p className="text-muted-foreground text-sm" suppressHydrationWarning>
+          <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} Tononkira. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
   );
-};
+}

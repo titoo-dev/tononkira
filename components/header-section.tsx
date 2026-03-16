@@ -18,7 +18,7 @@ export async function HeaderSection() {
               alt="Tononkira Logo"
               width={120}
               height={60}
-              className="h-16 object-cover"
+              className="h-10 w-auto object-contain"
             />
           </Link>
 

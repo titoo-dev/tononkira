@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { ChevronRight } from "lucide-react";
 import {
   getLatestSongs,
   type LatestSongWithLyrics,
@@ -30,22 +30,22 @@ export async function FeaturedLyricsSection() {
     <section className="py-16">
       <div className="mb-8 flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Featured Lyrics</h2>
-        <Button variant="ghost" className="text-sm" asChild>
-          <Link href="/lyrics">View all</Link>
-        </Button>
+        <Link href="/lyrics" className="hover:text-primary text-sm transition-colors">
+          View all
+        </Link>
       </div>
 
       <div className="relative -mx-4 px-4">
         <div className="overflow-hidden pb-6">
           <div className="animate-marquee hover:pause flex space-x-6">
-            {latestSongs.map((song) => {
-              const randomColor =
-                colors[Math.floor(Math.random() * colors.length)];
+            {[...latestSongs, ...latestSongs].map((song, index) => {
+              const randomColor = colors[index % colors.length];
 
               return (
-                <div
-                  key={song.id}
-                  className={`${randomColor} flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md`}
+                <Link
+                  key={`${song.id}-${index}`}
+                  href={`/lyrics/${song.artists.at(0)?.slug}/${song.slug}`}
+                  className={`${randomColor} group flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md hover:ring-2 hover:ring-ring/30`}
                 >
                   <div className="mb-3 flex items-center space-x-3">
                     <div className="bg-foreground/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md">
@@ -60,27 +60,23 @@ export async function FeaturedLyricsSection() {
                       </p>
                     </div>
                   </div>
-                  <div className="text-muted-foreground space-y-2 text-xs">
-                    <p className="truncate">...</p>
+                  <div className="text-muted-foreground space-y-1 text-xs">
                     <p>
                       Updated <RelativeTime date={song.updatedAt} />
                     </p>
                     <p>{song.views ?? 0} views</p>
                   </div>
-                  <Link
-                    href={`/lyrics/${song.artists.at(0)?.slug}/${song.slug}`}
-                    className="mt-4 self-end"
-                  >
-                    <Button variant="ghost" size="sm">
-                      View lyrics
-                    </Button>
-                  </Link>
-                </div>
+                  <div className="mt-4 flex items-center gap-1 self-end text-sm text-muted-foreground group-hover:text-primary transition-colors">
+                    View lyrics
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </div>
+                </Link>
               );
             })}
           </div>
         </div>
         <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l to-transparent"></div>
+        <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r to-transparent"></div>
       </div>
     </section>
   );

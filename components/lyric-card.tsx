@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "./ui/button";
 import { ChevronRight, Music } from "lucide-react";
 
 interface LyricCardProps {
@@ -18,14 +17,15 @@ export function LyricCard({
   artistSlug,
 }: LyricCardProps) {
   const colorClasses = {
-    primary: "bg-primary/10",
-    secondary: "bg-secondary/10",
-    accent: "bg-accent/10",
+    primary: "bg-primary/10 hover:bg-primary/15",
+    secondary: "bg-secondary/10 hover:bg-secondary/15",
+    accent: "bg-accent/10 hover:bg-accent/15",
   };
 
   return (
-    <div
-      className={`${colorClasses[color]} hover:ring-ring/30 group flex flex-col rounded-xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:ring-2`}
+    <Link
+      href={`/lyrics/${artistSlug}/${titleSlug}`}
+      className={`${colorClasses[color]} group flex flex-col rounded-xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:ring-2 hover:ring-ring/30`}
     >
       {/* Artist and song info section with icon */}
       <div className="mb-4 flex items-center gap-3">
@@ -45,21 +45,11 @@ export function LyricCard({
         </div>
       </div>
 
-      {/* View lyrics button */}
-      <Link
-        href={`/lyrics/${artistSlug}/${titleSlug}`}
-        className="mt-auto block w-full"
-      >
-        <Button
-          variant="ghost"
-          size="sm"
-          className="group-hover:text-primary mt-2 self-end transition-colors"
-          aria-label="View lyrics"
-        >
-          View lyrics
-          <ChevronRight className="ml-1 h-3.5 w-3.5" />
-        </Button>
-      </Link>
-    </div>
+      {/* View lyrics indicator */}
+      <div className="mt-auto flex items-center gap-1 pt-2 text-sm text-muted-foreground group-hover:text-primary transition-colors">
+        View lyrics
+        <ChevronRight className="h-3.5 w-3.5" />
+      </div>
+    </Link>
   );
 }

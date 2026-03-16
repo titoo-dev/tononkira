@@ -99,11 +99,46 @@
   --chart-5: oklch(73% 0.16 40);
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@theme inline {
+  --animate-marquee: marquee 40s linear infinite;
+}
+
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: var(--animate-marquee);
+  }
+  .pause {
+    animation-play-state: paused;
+  }
+  .hover\:pause:hover {
+    animation-play-state: paused;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

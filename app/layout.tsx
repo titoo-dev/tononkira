@@ -21,7 +21,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Tononkira",
-  // description: "Hirahira",
+  description: "Discover and explore Malagasy song lyrics from your favorite artists in one place.",
 };
 
 export default async function RootLayout({

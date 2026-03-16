@@ -17,9 +17,10 @@ export interface Verse {
 
 export interface LyricsSectionProps {
   lyric: Lyric;
+  updatedAt?: Date;
 }
 
-export const LyricsSection = ({ lyric }: LyricsSectionProps) => {
+export const LyricsSection = ({ lyric, updatedAt }: LyricsSectionProps) => {
   const lyrics: LyricsAnalysis = JSON.parse(lyric.content);
   const [isKaraokeMode, setIsKaraokeMode] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -145,7 +146,7 @@ export const LyricsSection = ({ lyric }: LyricsSectionProps) => {
 
       <LyricsFooter
         isKaraokeMode={isKaraokeMode}
-        lastUpdated="2023-06-15" // Replace with actual last updated date or pass it as a prop to LyricsSection
+        lastUpdated={updatedAt ? updatedAt.toLocaleDateString() : ""}
         onFullScreenClick={() => {
           // Handle full screen functionality here
           document.documentElement.requestFullscreen().catch((err) => {

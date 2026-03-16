@@ -82,7 +82,7 @@ async function SongDetail({
           </div>
 
           {/* Right column with lyrics */}
-          <LyricsSection lyric={songData.lyric!} />
+          <LyricsSection lyric={songData.lyric!} updatedAt={songData.updatedAt} />
         </div>
 
         <SimilarSongsSection />

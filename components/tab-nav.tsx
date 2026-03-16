@@ -1,4 +1,4 @@
-import { CalendarIcon, Disc, Users } from "lucide-react";
+import { AlignLeft, CalendarIcon, Disc } from "lucide-react";
 import { CustomTab } from "./custom-tab";
 import { Tabs, TabsContent, TabsList } from "./ui/tabs";
 import { LyricsTabContent } from "./lyrics-tab-content";
@@ -27,7 +27,7 @@ export function TabNav({ defaultValue, currentPage }: TabNavProps) {
     },
     {
       value: "alphabetical",
-      icon: <Users className="h-4 w-4" />,
+      icon: <AlignLeft className="h-4 w-4" />,
       label: "A-Z",
       colorClass: "primary",
     },
