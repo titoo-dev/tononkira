@@ -26,25 +26,28 @@ export const KaraokeMode = ({
         style={{ scrollBehavior: "smooth" }}
       >
         <div className="flex min-h-full flex-col items-center justify-center py-4 md:py-8">
-          {timedLyrics.map((line, index) => (
+          {timedLyrics.map((line, position) => (
             <div
-              id={`lyric-${index}`}
-              key={index}
+              id={`lyric-${position}`}
+              key={line.startTime}
               className={`my-3 w-full cursor-pointer px-3 text-center transition-all duration-500 md:my-5 md:px-6 ${
-                index === activeLyricIndex
+                position === activeLyricIndex
                   ? "scale-105 opacity-100 md:scale-110"
-                  : index < activeLyricIndex
+                  : position < activeLyricIndex
                     ? "opacity-50"
                     : "opacity-70"
               }`}
               onClick={() => handleLyricTap(line.startTime)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") handleLyricTap(line.startTime);
+              }}
               tabIndex={0}
               role="button"
-              aria-current={index === activeLyricIndex}
+              aria-current={position === activeLyricIndex}
             >
               <p
                 className={`text-lg font-medium transition-all duration-500 md:text-xl lg:text-2xl ${
-                  index === activeLyricIndex
+                  position === activeLyricIndex
                     ? "from-primary to-secondary animate-pulse bg-gradient-to-r bg-clip-text font-bold text-transparent"
                     : "text-foreground/80"
                 }`}

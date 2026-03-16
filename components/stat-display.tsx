@@ -32,7 +32,7 @@ export async function StatsDisplay() {
   return (
     <div className="grid grid-cols-3 gap-2 pt-8">
       {stats.map((stat, index) => (
-        <StatItem value={stat.value} label={stat.label} key={index} />
+        <StatItem value={stat.value} label={stat.label} key={stat.label} />
       ))}
     </div>
   );

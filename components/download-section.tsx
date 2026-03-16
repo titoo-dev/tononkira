@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Music, Search, StarIcon, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "motion/react";
+import { LazyMotion, domAnimation, m } from "motion/react";
 import Image from "next/image";
 
 export const DownloadSection = () => {
@@ -21,7 +21,8 @@ export const DownloadSection = () => {
 
       <div className="container mx-auto px-4">
         <div className="mb-16 text-center">
-          <motion.div
+          <LazyMotion features={domAnimation}>
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -41,12 +42,14 @@ export const DownloadSection = () => {
               feature-rich mobile application. Create playlists, discover new
               artists, and enjoy lyrics even when offline.
             </p>
-          </motion.div>
+          </m.div>
+          </LazyMotion>
         </div>
 
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
           {/* Features section */}
-          <motion.div
+          <LazyMotion features={domAnimation}>
+          <m.div
             className="space-y-10 lg:col-span-5"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -54,10 +57,10 @@ export const DownloadSection = () => {
             viewport={{ once: true }}
           >
             <DescriptionSection />
-          </motion.div>
+          </m.div>
 
           {/* Device mockups */}
-          <motion.div
+          <m.div
             className="relative lg:col-span-7"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -65,7 +68,8 @@ export const DownloadSection = () => {
             viewport={{ once: true }}
           >
             <MockupsSection />
-          </motion.div>
+          </m.div>
+          </LazyMotion>
         </div>
       </div>
     </section>

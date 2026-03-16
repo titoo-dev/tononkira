@@ -94,10 +94,11 @@ async function SearchResultSectionContent({
     );
 
     const parts = text.split(regex);
-    return parts.map((part, i) =>
+    const partsWithKeys = parts.map((part, i) => ({ part, key: `${i}-${part}` }));
+    return partsWithKeys.map(({ part, key }) =>
       regex.test(part) ? (
         <mark
-          key={i}
+          key={key}
           className="bg-primary/20 text-primary rounded px-0.5 font-medium"
         >
           {part}

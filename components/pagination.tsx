@@ -2,7 +2,7 @@
 
 import { cn, generatePagination } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useMemo, Suspense } from "react";
 import {
   PaginationEllipsis,
   PaginationLink,
@@ -14,7 +14,7 @@ type PaginationProps = {
   totalPages: number;
 };
 
-export const Pagination = ({ totalPages }: PaginationProps) => {
+const PaginationInner = ({ totalPages }: PaginationProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -55,24 +55,28 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
         />
 
         {/* Pages */}
-        {allPages.map((page, index) => {
-          if (totalPages <= 1) return null;
+        {(() => {
+          let ellipsisCount = 0;
+          return allPages.map((page) => {
+            if (totalPages <= 1) return null;
 
-          if (page === "...") {
-            return <PaginationEllipsis key={`ellipsis-${index}`} />;
-          }
+            if (page === "...") {
+              ellipsisCount++;
+              return <PaginationEllipsis key={`ellipsis-${ellipsisCount}`} />;
+            }
 
-          return (
-            <PaginationLink
-              key={`page-${page}`}
-              href={createPageURL(page)}
-              isActive={page === currentPage}
-              onClick={handlePageChange(page)}
-            >
-              {page}
-            </PaginationLink>
-          );
-        })}
+            return (
+              <PaginationLink
+                key={`page-${page}`}
+                href={createPageURL(page)}
+                isActive={page === currentPage}
+                onClick={handlePageChange(page)}
+              >
+                {page}
+              </PaginationLink>
+            );
+          });
+        })()}
 
         {/* Next button */}
         <PaginationNext
@@ -91,3 +95,9 @@ export const Pagination = ({ totalPages }: PaginationProps) => {
     </nav>
   );
 };
+
+export const Pagination = ({ totalPages }: PaginationProps) => (
+  <Suspense fallback={null}>
+    <PaginationInner totalPages={totalPages} />
+  </Suspense>
+);

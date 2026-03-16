@@ -38,12 +38,15 @@ export async function FeaturedLyricsSection() {
       <div className="relative -mx-4 px-4">
         <div className="overflow-hidden pb-6">
           <div className="animate-marquee hover:pause flex space-x-6">
-            {[...latestSongs, ...latestSongs].map((song, index) => {
-              const randomColor = colors[index % colors.length];
+            {[
+              ...latestSongs.map((s) => ({ ...s, _loopKey: `${s.id}-a` })),
+              ...latestSongs.map((s) => ({ ...s, _loopKey: `${s.id}-b` })),
+            ].map((song, position) => {
+              const randomColor = colors[position % colors.length];
 
               return (
                 <Link
-                  key={`${song.id}-${index}`}
+                  key={song._loopKey}
                   href={`/lyrics/${song.artists.at(0)?.slug}/${song.slug}`}
                   className={`${randomColor} group flex min-w-[280px] flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-md hover:ring-2 hover:ring-ring/30`}
                 >

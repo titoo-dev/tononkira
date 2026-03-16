@@ -4,7 +4,7 @@ import { fixLyricsWithAI } from "@/lib/actions/fix-lyrics-with-ai";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
 import { Loader2, Sparkles } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -63,40 +63,42 @@ export const FixWithAIButton: React.FC<FixWithAIButtonProps> = ({
       onClick={handleFixLyrics}
       disabled={isLoading || !lyricId}
     >
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="flex items-center"
-          >
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            <span>Enhancing...</span>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="idle"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="flex items-center"
-          >
-            <Sparkles className="mr-2 h-4 w-4" />
-            <span>Fix with AI</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <m.div
+              key="loading"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center"
+            >
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <span>Enhancing...</span>
+            </m.div>
+          ) : (
+            <m.div
+              key="idle"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center"
+            >
+              <Sparkles className="mr-2 h-4 w-4" />
+              <span>Fix with AI</span>
+            </m.div>
+          )}
+        </AnimatePresence>
 
-      {isLoading && (
-        <motion.div
-          className="bg-primary/10 absolute inset-0"
-          initial={{ width: "0%" }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 2.5, ease: "easeInOut" }}
-        />
-      )}
+        {isLoading && (
+          <m.div
+            className="bg-primary/10 absolute inset-0"
+            initial={{ width: "0%" }}
+            animate={{ width: "100%" }}
+            transition={{ duration: 2.5, ease: "easeInOut" }}
+          />
+        )}
+      </LazyMotion>
     </Button>
   );
 };

@@ -10,8 +10,8 @@ export const StandardLyricsView = ({ lyrics }: StandardLyricsViewProps) => {
         style={{ scrollBehavior: "smooth" }}
       >
         <div className="flex min-h-full flex-col py-4 md:py-8">
-          {lyrics.map((line, index) => (
-            <div key={index} className="px-3 md:px-6">
+          {lyrics.map((line, position) => (
+            <div key={`line-${position}`} className="px-3 md:px-6">
               <p
                 className={`my-1 transition-all duration-300 ${
                   line === ""

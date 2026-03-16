@@ -12,17 +12,17 @@ export async function LyricsTabContent({ currentPage }: LyricsTabContentProps) {
 
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {songs.map((song, index) => (
+      {songs.map((song, position) => (
         <LyricCard
-          key={`${song.id}-${index}`}
+          key={song.id}
           title={song.title}
           artist={song.artists.at(0)?.name || "Unknown Artist"}
           artistSlug={song.artists.at(0)?.slug || "unknown-artist"}
           titleSlug={song.slug}
           color={
-            index % 3 === 0
+            position % 3 === 0
               ? "primary"
-              : index % 3 === 1
+              : position % 3 === 1
                 ? "secondary"
                 : "accent"
           }
