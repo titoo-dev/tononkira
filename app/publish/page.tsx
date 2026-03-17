@@ -1,9 +1,10 @@
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PublishForm } from "@/components/publish/publish-form";
 
-export default async function PublishPage() {
+async function PublishContent() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -25,5 +26,13 @@ export default async function PublishPage() {
 
       <PublishForm />
     </main>
+  );
+}
+
+export default function PublishPage() {
+  return (
+    <Suspense>
+      <PublishContent />
+    </Suspense>
   );
 }

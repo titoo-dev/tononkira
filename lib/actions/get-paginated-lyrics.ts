@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../prisma";
 
 const ITEMS_PER_PAGE = 12;

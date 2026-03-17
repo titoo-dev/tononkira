@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -7,7 +8,7 @@ import { Music, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
-export default async function ProfilePage() {
+async function ProfileContent() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -115,5 +116,13 @@ export default async function ProfilePage() {
         )}
       </section>
     </main>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense>
+      <ProfileContent />
+    </Suspense>
   );
 }
