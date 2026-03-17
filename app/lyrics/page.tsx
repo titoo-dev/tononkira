@@ -44,7 +44,7 @@ async function LyricsContent({ searchParams }: { searchParams: SearchParams }) {
 // Main page component
 export default function LyricsPage(props: { searchParams?: SearchParams }) {
   return (
-    <main className="container mx-auto px-4 py-12">
+    <main className="container mx-auto px-6 py-16">
       <Suspense fallback={<SearchResultSkeleton />}>
         <LyricsContent
           searchParams={props.searchParams ?? Promise.resolve({})}

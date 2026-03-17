@@ -1,4 +1,7 @@
-import { FileEdit, MicVocal, Pause, Play, SkipBack } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { FileEdit, MicVocal, Pause, Play, SkipBack, Check } from "lucide-react";
 import { Button } from "../ui/button";
 import { FixWithAIButton } from "./fix-with-ai-button";
 
@@ -20,6 +23,13 @@ export const LyricsHeader = ({
   handleRestart,
   lyricId,
 }: LyricsHeaderProps) => {
+  const [correctionSent, setCorrectionSent] = useState(false);
+
+  function handleSuggestCorrection() {
+    setCorrectionSent(true);
+    setTimeout(() => setCorrectionSent(false), 2500);
+  }
+
   return (
     <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center md:mb-6">
       <div className="flex flex-wrap items-center gap-3">
@@ -82,9 +92,23 @@ export const LyricsHeader = ({
             </Button>
           </>
         )}
-        <Button variant="outline" size="sm" className="text-primary">
-          <FileEdit className="mr-2 h-4 w-4" />
-          Suggest correction
+        <Button
+          variant="outline"
+          size="sm"
+          className={`transition-all duration-200 ${
+            correctionSent
+              ? "border-green-400 bg-green-50 text-green-600 dark:bg-green-950/30"
+              : "text-primary"
+          }`}
+          onClick={handleSuggestCorrection}
+          aria-label="Suggérer une correction"
+        >
+          {correctionSent ? (
+            <Check className="mr-2 h-4 w-4 text-green-600" />
+          ) : (
+            <FileEdit className="mr-2 h-4 w-4" />
+          )}
+          {correctionSent ? "Merci !" : "Suggest correction"}
         </Button>
         <FixWithAIButton lyricId={lyricId} />
       </div>

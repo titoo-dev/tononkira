@@ -5,6 +5,15 @@
 
 :root {
   --font-geist-mono: monospace;
+
+  /* ─── Grid / Modular System ─────────────────────────────── */
+  --grid-cols: 12;
+  --grid-gutter: 1.5rem;        /* 24px — column gap */
+  --section-spacing: 5rem;      /* 80px — vertical section rhythm */
+  --section-spacing-sm: 3rem;   /* 48px — tight sections */
+  --container-px: 1.5rem;       /* 24px — horizontal page padding */
+  --container-max: 80rem;       /* 1280px — max content width */
+
   --background: oklch(100% 0 0);
   --foreground: oklch(0% 0 40);
   --muted: oklch(96.86% 0.01 210);
@@ -121,6 +130,34 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    /* Sticky footer: body is a full-height flex column */
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+  }
+}
+
+@layer utilities {
+  /* Page section rhythm — consistent vertical spacing */
+  .page-section {
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+  }
+  .page-section-sm {
+    padding-top: var(--section-spacing-sm);
+    padding-bottom: var(--section-spacing-sm);
+  }
+  /* Modular grid — 12-column layout */
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+    gap: var(--grid-gutter);
+  }
+  /* Section divider — horizontal rule with grid rhythm */
+  .grid-divider {
+    border-top: 1px solid oklch(from var(--border) l c h / 0.5);
+    margin-top: var(--section-spacing);
+    padding-top: var(--section-spacing);
   }
 }
 

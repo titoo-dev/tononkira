@@ -5,8 +5,8 @@ import { UserMenu } from "./auth/user-menu";
 
 export async function HeaderSection() {
   return (
-    <header className="border-border/40 bg-background/80 sticky top-0 z-40 border-b px-4 backdrop-blur-md md:px-0">
-      <div className="container mx-auto py-4">
+    <header className="border-border/40 bg-background/80 sticky top-0 z-40 border-b backdrop-blur-md">
+      <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link

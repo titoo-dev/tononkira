@@ -60,7 +60,7 @@ async function SongDetail({
       <Suspense fallback={<SearchResultSkeleton />}>
         <SearchResultSection searchQuery={query} />
       </Suspense>
-      <main className="container mx-auto px-6 py-12">
+      <main className="container mx-auto px-6 py-16">
         <BackNavigation />
 
         <div className="grid gap-10 md:grid-cols-3">

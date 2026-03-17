@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { User, LogOut, Music } from "lucide-react";
+import { User, LogOut, Music, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Popover,
@@ -14,6 +15,7 @@ import {
 export function UserMenu() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+  const [signingOut, setSigningOut] = useState(false);
 
   if (isPending) {
     return <div className="bg-muted h-9 w-9 animate-pulse rounded-full" />;
@@ -33,6 +35,7 @@ export function UserMenu() {
   }
 
   async function handleSignOut() {
+    setSigningOut(true);
     await signOut();
     router.push("/");
     router.refresh();
@@ -76,10 +79,15 @@ export function UserMenu() {
         </Link>
         <button
           onClick={handleSignOut}
-          className="text-destructive hover:bg-destructive/10 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors"
+          disabled={signingOut}
+          className="text-destructive hover:bg-destructive/10 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors disabled:pointer-events-none disabled:opacity-50"
         >
-          <LogOut className="h-4 w-4" />
-          Déconnexion
+          {signingOut ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <LogOut className="h-4 w-4" />
+          )}
+          {signingOut ? "Déconnexion..." : "Déconnexion"}
         </button>
       </PopoverContent>
     </Popover>

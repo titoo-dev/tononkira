@@ -14,7 +14,7 @@ async function PublishContent() {
   }
 
   return (
-    <main className="container mx-auto max-w-2xl px-4 py-12">
+    <main className="container mx-auto max-w-2xl px-6 py-16">
       <div className="mb-8 space-y-2">
         <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold tracking-tight">
           Publier une chanson

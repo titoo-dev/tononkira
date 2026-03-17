@@ -40,7 +40,7 @@ export default async function RootLayout({
 
         <HeaderSection />
 
-        <div className="bg-background text-foreground">{children}</div>
+        <div className="bg-background text-foreground flex-1">{children}</div>
 
         <Suspense>
           <FooterSection />

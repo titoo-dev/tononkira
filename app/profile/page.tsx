@@ -27,7 +27,7 @@ async function ProfileContent() {
   });
 
   return (
-    <main className="container mx-auto max-w-4xl px-4 py-12">
+    <main className="container mx-auto max-w-4xl px-6 py-16">
       {/* Profile header */}
       <div className="mb-10 flex items-start justify-between">
         <div className="flex items-center gap-4">

@@ -18,7 +18,7 @@ async function SearchResult({ searchParams }: { searchParams: SearchParams }) {
 
 export default function Home(props: { searchParams?: SearchParams }) {
   return (
-    <main className="selection:bg-primary selection:text-primary-foreground container mx-auto px-4 pt-8 pb-16">
+    <main className="selection:bg-primary selection:text-primary-foreground container mx-auto px-6 pt-10 pb-20">
       <Suspense fallback={<SearchResultSkeleton />}>
         <SearchResult searchParams={props.searchParams ?? Promise.resolve({})} />
       </Suspense>
