@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -22,16 +23,19 @@ model Artist {
 }
 
 model Song {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String
-  trackNumber Int?
-  views       Int?     @default(0)
-  lyricId     Int?     @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  lyric       Lyric?   @relation(fields: [lyricId], references: [id])
-  artists     Artist[] @relation("ArtistToSong")
+  id            Int        @id @default(autoincrement())
+  title         String
+  slug          String
+  trackNumber   Int?
+  views         Int?       @default(0)
+  lyricId       Int?       @unique
+  publishedById String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  lyric         Lyric?     @relation(fields: [lyricId], references: [id])
+  artists       Artist[]   @relation("ArtistToSong")
+  publishedBy   User?      @relation("UserSongs", fields: [publishedById], references: [id])
+  likedBy       LikedSong[]
 }
 
 model LikedSong {
@@ -40,8 +44,12 @@ model LikedSong {
   songId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  song      Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
 
   @@unique([userId, songId])
+  @@index([userId])
+  @@index([songId])
 }
 
 model Lyric {
@@ -55,4 +63,74 @@ model Lyric {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   song        Song?
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          String?
+  banned        Boolean?  @default(false)
+  banReason     String?
+  banExpires    DateTime?
+  sessions      Session[]
+  accounts      Account[]
+  songs         Song[]      @relation("UserSongs")
+  likedSongs    LikedSong[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id             String   @id
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

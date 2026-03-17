@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SearchBar } from "./search";
+import { UserMenu } from "./auth/user-menu";
 
 export async function HeaderSection() {
   return (
@@ -25,6 +26,7 @@ export async function HeaderSection() {
           {/* Search and Actions */}
           <div className="flex items-center gap-3">
             <SearchBar />
+            <UserMenu />
           </div>
         </div>
       </div>
